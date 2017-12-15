@@ -1,2 +1,11 @@
 git commit -m 'Remove the now ignored directory "MoveConmanderCentral"'
 git push origin 2017-group2
+*.iml
+*.html
+*.py
+LocatorTool/LocatingTool/help/build/html/.buildinfo
+*.qrc
+*.sh
+*.asc
+*.rar
+test for new branch
