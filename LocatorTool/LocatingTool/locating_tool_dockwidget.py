@@ -24,7 +24,7 @@
 import os
 import os.path
 
-from PyQt4 import QtGui, uic
+from PyQt4 import QtGui, QtCore, uic
 from PyQt4.QtCore import pyqtSignal
 
 from . import utility_functions as uf
@@ -55,15 +55,68 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # data
 
         self.openFireButton.clicked.connect(self.openFire)
+        self.minDistButton.clicked.connect(self.minDist)
+        self.maxDistButton.clicked.connect(self.maxDist)
 
         # initialisation
-
 
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
         if new_file:
             self.iface.addProject(unicode(new_file))
+
+    def minDist(self):
+        self.calculateBuffer()
+
+    def maxDist(self):
+        self.calculateBuffer()
+
+
+    def calculateBuffer(self):
+        #layer = self.getSelectedLayer()
+        #origins = self.getSelectedLayer().selectedFeatures()
+        layer = uf.getLegendLayerByName(self.iface, "Fire1")
+        origins = uf.selectFeaturesByExpression(layer, "id > 0")
+
+        if origins > 0:
+            cutoff_distance = self.getBufferCutoff()
+            buffers = {}
+            for point in origins:
+                geom = point.geometry()
+                buffers[point.id()] = geom.buffer(cutoff_distance,12).asPolygon()
+            # store the buffer results in temporary layer called "Buffers"
+            buffer_layer = uf.getLegendLayerByName(self.iface, "Buffer")
+            # create one if it doesn't exist
+            if not buffer_layer:
+                attribs = ['id', 'distance']
+                types = [QtCore.QVariant.String, QtCore.QVariant.Double]
+                buffer_layer = uf.createTempLayer('Buffer','POLYGON',layer.crs().postgisSrid(), attribs, types)
+                uf.loadTempLayer(buffer_layer)
+                buffer_layer.setLayerName('Buffer')
+            # insert buffer polygons
+            geoms = []
+            values = []
+            for buffer in buffers.iteritems():
+                # each buffer has an id and a geometry
+                geoms.append(buffer[1])
+                # in the case of values, it expects a list of multiple values in each item - list of lists
+                values.append([buffer[0],cutoff_distance])
+            uf.insertTempFeatures(buffer_layer, geoms, values)
+            self.refreshCanvas(buffer_layer)
+
+    def refreshCanvas(self, layer):
+        if self.canvas.isCachingEnabled():
+            layer.setCacheImage(None)
+        else:
+            self.canvas.refresh()
+
+    def getBufferCutoff(self):
+        cutoff = self.bufferCutoffEdit.text()
+        if uf.isNumeric(cutoff):
+            return uf.convertNumeric(cutoff)
+        else:
+            return 0
 
 
     def closeEvent(self, event):

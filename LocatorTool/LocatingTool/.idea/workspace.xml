@@ -14,8 +14,8 @@
       <file leaf-file-name="locating_tool.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/locating_tool.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3376">
-              <caret line="223" column="68" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="223" selection-end-column="68" />
+            <state relative-caret-position="181">
+              <caret line="15" column="54" lean-forward="false" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
               <folding>
                 <element signature="e#1165#1244#0" expanded="true" />
               </folding>
@@ -23,11 +23,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="locating_tool_dockwidget.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="locating_tool_dockwidget.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="64" column="20" lean-forward="true" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+            <state relative-caret-position="102">
+              <caret line="79" column="53" lean-forward="false" selection-start-line="79" selection-start-column="48" selection-end-line="79" selection-end-column="53" />
               <folding>
                 <element signature="e#1175#1184#0" expanded="true" />
               </folding>
@@ -35,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="spatial_decision_dockwidget.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="spatial_decision_dockwidget.py" pinned="false" current-in-tab="true">
         <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="164" column="20" lean-forward="true" selection-start-line="164" selection-start-column="20" selection-end-line="164" selection-end-column="20" />
+            <state relative-caret-position="210">
+              <caret line="457" column="37" lean-forward="false" selection-start-line="457" selection-start-column="37" selection-end-line="457" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -48,8 +48,8 @@
       <file leaf-file-name="utility_functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utility_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="630" column="35" lean-forward="false" selection-start-line="630" selection-start-column="27" selection-end-line="630" selection-end-column="35" />
+            <state relative-caret-position="283">
+              <caret line="342" column="8" lean-forward="true" selection-start-line="342" selection-start-column="8" selection-end-line="343" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -59,20 +59,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getlast</find>
-      <find>import</find>
-      <find>iface</find>
-      <find>updatelayer</find>
-      <find>getlastdir</find>
-      <find>SDSS</find>
-      <find>GetLast</find>
-      <find>GetLastDir</find>
-      <find>Qtcore</find>
-      <find>OpenFile</find>
+      <find>ServiceArea</find>
+      <find>ServiceAreaCutOffEdit</find>
+      <find>getServiceArea</find>
+      <find>GetLegendLayerByName</find>
+      <find>GetSelected</find>
+      <find>GetSelectedLayer</find>
       <find>selectlayercombo</find>
-      <find>SelectLayerCombo</find>
-      <find>LastUsed</find>
-      <find>openfile</find>
+      <find>selected</find>
+      <find>buffer</find>
+      <find>calculateBu</find>
+      <find>RefreshCanvas</find>
+      <find>canvas</find>
+      <find>refreshCanvas</find>
+      <find>getLegendLayerByName</find>
+      <find>GetBuffer</find>
+      <find>Bufferbut</find>
+      <find>calculatebuffer</find>
+      <find>select</find>
+      <find>calculatebu</find>
+      <find>selectfeaturesbyexpression</find>
+      <find>expressionedit</find>
+      <find>getselectedlayer</find>
+      <find>feature</find>
+      <find>expression</find>
+      <find>selectFeaturesByExpression</find>
+      <find>expressionEdit</find>
+      <find>Buffer</find>
+      <find>Expressionselectbutton</find>
+      <find>selectfeatures</find>
+      <find>selectfeaturesexpression</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -80,6 +96,7 @@
       <list>
         <option value="$PROJECT_DIR$/locating_tool.py" />
         <option value="$PROJECT_DIR$/locating_tool_dockwidget.py" />
+        <option value="D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py" />
       </list>
     </option>
   </component>
@@ -159,7 +176,7 @@
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.213125" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.213125" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -199,39 +216,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utility_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="342" column="8" lean-forward="true" selection-start-line="342" selection-start-column="8" selection-end-line="343" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/locating_tool.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3376">
-          <caret line="223" column="68" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="223" selection-end-column="68" />
+        <state relative-caret-position="181">
+          <caret line="15" column="54" lean-forward="false" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
           <folding>
             <element signature="e#1165#1244#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utility_functions.py">
+    <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="630" column="35" lean-forward="false" selection-start-line="630" selection-start-column="27" selection-end-line="630" selection-end-column="35" />
-          <folding />
+        <state relative-caret-position="102">
+          <caret line="79" column="53" lean-forward="false" selection-start-line="79" selection-start-column="48" selection-end-line="79" selection-end-column="53" />
+          <folding>
+            <element signature="e#1175#1184#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="164" column="20" lean-forward="true" selection-start-line="164" selection-start-column="20" selection-end-line="164" selection-end-column="20" />
+        <state relative-caret-position="210">
+          <caret line="457" column="37" lean-forward="false" selection-start-line="457" selection-start-column="37" selection-end-line="457" selection-end-column="37" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="64" column="20" lean-forward="true" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
-          <folding>
-            <element signature="e#1175#1184#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
