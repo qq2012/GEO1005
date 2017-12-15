@@ -26,8 +26,8 @@
       <file leaf-file-name="locating_tool_dockwidget.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="62" column="42" lean-forward="false" selection-start-line="62" selection-start-column="35" selection-end-line="62" selection-end-column="42" />
+            <state relative-caret-position="329">
+              <caret line="64" column="20" lean-forward="true" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
               <folding>
                 <element signature="e#1175#1184#0" expanded="true" />
               </folding>
@@ -38,8 +38,8 @@
       <file leaf-file-name="spatial_decision_dockwidget.py" pinned="false" current-in-tab="false">
         <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="159" column="8" lean-forward="false" selection-start-line="159" selection-start-column="8" selection-end-line="160" selection-end-column="48" />
+            <state relative-caret-position="181">
+              <caret line="164" column="20" lean-forward="true" selection-start-line="164" selection-start-column="20" selection-end-line="164" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -48,8 +48,8 @@
       <file leaf-file-name="utility_functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utility_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="627" column="11" lean-forward="false" selection-start-line="627" selection-start-column="4" selection-end-line="627" selection-end-column="11" />
+            <state relative-caret-position="300">
+              <caret line="630" column="35" lean-forward="false" selection-start-line="630" selection-start-column="27" selection-end-line="630" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -71,6 +71,7 @@
       <find>OpenFile</find>
       <find>selectlayercombo</find>
       <find>SelectLayerCombo</find>
+      <find>LastUsed</find>
       <find>openfile</find>
     </findStrings>
   </component>
@@ -210,24 +211,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/utility_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="627" column="11" lean-forward="false" selection-start-line="627" selection-start-column="4" selection-end-line="627" selection-end-column="11" />
+        <state relative-caret-position="300">
+          <caret line="630" column="35" lean-forward="false" selection-start-line="630" selection-start-column="27" selection-end-line="630" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="159" column="8" lean-forward="false" selection-start-line="159" selection-start-column="8" selection-end-line="160" selection-end-column="48" />
+        <state relative-caret-position="181">
+          <caret line="164" column="20" lean-forward="true" selection-start-line="164" selection-start-column="20" selection-end-line="164" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="62" column="42" lean-forward="false" selection-start-line="62" selection-start-column="35" selection-end-line="62" selection-end-column="42" />
+        <state relative-caret-position="329">
+          <caret line="64" column="20" lean-forward="true" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
           <folding>
             <element signature="e#1175#1184#0" expanded="true" />
           </folding>

@@ -62,7 +62,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-        self.iface.addProject(unicode(new_file))
+        if new_file:
+            self.iface.addProject(unicode(new_file))
 
 
     def closeEvent(self, event):
