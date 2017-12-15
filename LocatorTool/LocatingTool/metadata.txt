@@ -1,0 +1,39 @@
+# This file contains metadata for your plugin. Since 
+# version 2.0 of QGIS this is the proper way to supply 
+# information about a plugin. The old method of 
+# embedding metadata in __init__.py will 
+# is no longer supported since version 2.0.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Locating Tool
+qgisMinimumVersion=2.0
+description=Finds suitable areas for a mobile control center
+version=0.1
+author=Group 2
+email=group2@group2company.enterprise
+
+about=This plugin has been developed to help in the decision of locating a mobile command center (MCC) after a major incident has taken place. A MCC is used to get a central location for decision making and logistics on site close to the incident. This location serves as a rendezvous point and offer service facilities for the emergency workers as well as an extended arm for the decision makers which often are located far from the incident.
+
+tracker=placeholder
+repository=placeholder
+# End of mandatory metadata
+
+# Recommended items:
+
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=
+
+homepage=https://github.com/qq2012/GEO1005_2017_group2/wiki/
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
