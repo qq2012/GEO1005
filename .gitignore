@@ -1,2 +1,2 @@
 git commit -m 'Remove the now ignored directory "MoveConmanderCentral"'
-git push origin master
+git push origin 2017-group2
