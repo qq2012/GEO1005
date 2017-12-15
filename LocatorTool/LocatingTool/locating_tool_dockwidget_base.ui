@@ -18,6 +18,13 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QPushButton" name="minDistButton">
+      <property name="text">
+       <string>Min distance</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QPushButton" name="openFireButton">
       <property name="sizePolicy">
@@ -30,6 +37,19 @@
        <string>Open fire scene</string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="minDistLineEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="maxDistButton">
+      <property name="text">
+       <string>Max dist</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="maxDistLineEdit"/>
     </item>
    </layout>
   </widget>
