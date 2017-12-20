@@ -31,7 +31,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
       <file leaf-file-name="locating_tool.py" pinned="false" current-in-tab="false">
+=======
+<<<<<<< Updated upstream
+      <file leaf-file-name="locating_tool.py" pinned="false" current-in-tab="true">
+>>>>>>> 9c82924f50ed526d3634623995e1b9afd6b6d780
         <entry file="file://$PROJECT_DIR$/locating_tool.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1125">
@@ -46,10 +51,37 @@
       <file leaf-file-name="locating_tool_dockwidget.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="204">
               <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+=======
+            <state relative-caret-position="1224">
+              <caret line="78" column="3" lean-forward="false" selection-start-line="78" selection-start-column="3" selection-end-line="80" selection-end-column="0" />
+=======
+      <file leaf-file-name="locating_tool_dockwidget.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="75" column="30" lean-forward="false" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+>>>>>>> Stashed changes
+>>>>>>> 9c82924f50ed526d3634623995e1b9afd6b6d780
               <folding>
-                <element signature="e#1175#1184#0" expanded="true" />
+                <element signature="e#24#1173#1" expanded="false" />
+                <element signature="e#1577#2345#0" expanded="false" />
+                <element signature="e#1665#1707#0" expanded="false" />
+                <element signature="e#2100#2130#0" expanded="false" />
+                <element signature="e#2391#2585#0" expanded="false" />
+                <element signature="e#2618#2640#0" expanded="false" />
+                <element signature="e#2673#2695#0" expanded="false" />
+                <element signature="e#2737#4271#0" expanded="false" />
+                <element signature="e#2737#2769#0" expanded="false" />
+                <element signature="e#2995#4271#0" expanded="false" />
+                <element signature="e#3111#3216#0" expanded="false" />
+                <element signature="e#3459#3771#0" expanded="false" />
+                <element signature="e#3919#4163#0" expanded="false" />
+                <element signature="e#4317#4437#0" expanded="false" />
+                <element signature="e#4478#4628#0" expanded="false" />
+                <element signature="e#4672#4720#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -106,10 +138,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
-    <option name="width" value="814" />
-    <option name="height" value="867" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -126,6 +157,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -138,11 +170,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.customizations" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -172,13 +203,21 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< Updated upstream
     <frame x="-7" y="0" width="814" height="867" extended-state="0" />
     <editor active="true" />
+=======
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+>>>>>>> Stashed changes
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.213125" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15236051" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+<<<<<<< Updated upstream
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18742442" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1883289" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -193,6 +232,10 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+<<<<<<< Updated upstream
+=======
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -208,6 +251,7 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/locating_tool.py">
+<<<<<<< Updated upstream
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -238,24 +282,66 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
           <caret line="342" column="8" lean-forward="true" selection-start-line="342" selection-start-column="8" selection-end-line="343" selection-end-column="45" />
+<<<<<<< HEAD
           <folding />
+=======
+=======
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#1165#1244#0" expanded="true" />
+          </folding>
+>>>>>>> Stashed changes
+>>>>>>> 9c82924f50ed526d3634623995e1b9afd6b6d780
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/Plugins/2016_Group07_Transit-BuiltEnvironment-master/PTStopCalc_Plugin_Neeraj/pt_stop_calc_dockwidget.py">
+    <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="-1275">
           <caret line="15" column="54" lean-forward="false" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
+=======
+        <state relative-caret-position="1080">
+          <caret line="78" column="3" lean-forward="false" selection-start-line="78" selection-start-column="3" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="e#24#1173#1" expanded="false" />
+            <element signature="e#1577#2345#0" expanded="false" />
+            <element signature="e#1665#1707#0" expanded="false" />
+            <element signature="e#2100#2130#0" expanded="false" />
+            <element signature="e#2391#2585#0" expanded="false" />
+            <element signature="e#2618#2640#0" expanded="false" />
+            <element signature="e#2673#2695#0" expanded="false" />
+            <element signature="e#2737#4271#0" expanded="false" />
+            <element signature="e#2737#2769#0" expanded="false" />
+            <element signature="e#2995#4271#0" expanded="false" />
+            <element signature="e#3111#3216#0" expanded="false" />
+            <element signature="e#3459#3771#0" expanded="false" />
+            <element signature="e#3919#4163#0" expanded="false" />
+            <element signature="e#4317#4437#0" expanded="false" />
+            <element signature="e#4478#4628#0" expanded="false" />
+            <element signature="e#4672#4720#0" expanded="false" />
+          </folding>
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py">
+    <entry file="file://D:/Plugins/SpatialDecision/utility_functions.py" />
+    <entry file="file://$PROJECT_DIR$/utility_functions.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="210">
           <caret line="457" column="37" lean-forward="false" selection-start-line="457" selection-start-column="37" selection-end-line="457" selection-end-column="37" />
+=======
+        <state relative-caret-position="283">
+          <caret line="342" column="8" lean-forward="true" selection-start-line="342" selection-start-column="8" selection-end-line="343" selection-end-column="45" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/Plugins/2016_Group07_Transit-BuiltEnvironment-master/PTStopCalc_Plugin_Neeraj/pt_stop_calc_dockwidget.py" />
+    <entry file="file://D:/Plugins/GEO1005-master/SpatialDecision/spatial_decision_dockwidget.py" />
     <entry file="file://$PROJECT_DIR$/plugin_upload.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-34">
@@ -263,20 +349,60 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/../../SpatialDecision/spatial_decision_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
           <caret line="382" column="12" lean-forward="false" selection-start-line="382" selection-start-column="12" selection-end-line="382" selection-end-column="22" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/locating_tool.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="1224">
+          <caret line="78" column="3" lean-forward="false" selection-start-line="78" selection-start-column="3" selection-end-line="80" selection-end-column="0" />
+=======
+        <state relative-caret-position="326">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#1165#1244#0" expanded="true" />
+          </folding>
+>>>>>>> 9c82924f50ed526d3634623995e1b9afd6b6d780
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/locating_tool.py">
+    <entry file="file://$PROJECT_DIR$/locating_tool_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1125">
           <caret line="191" column="0" lean-forward="true" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
+=======
+<<<<<<< Updated upstream
+        <state relative-caret-position="17">
+          <caret line="169" column="52" lean-forward="false" selection-start-line="169" selection-start-column="52" selection-end-line="169" selection-end-column="52" />
+=======
+        <state relative-caret-position="330">
+          <caret line="75" column="30" lean-forward="false" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+>>>>>>> Stashed changes
+>>>>>>> 9c82924f50ed526d3634623995e1b9afd6b6d780
           <folding>
-            <element signature="e#1165#1244#0" expanded="true" />
+            <element signature="e#24#1173#1" expanded="false" />
+            <element signature="e#1577#2345#0" expanded="false" />
+            <element signature="e#1665#1707#0" expanded="false" />
+            <element signature="e#2100#2130#0" expanded="false" />
+            <element signature="e#2391#2585#0" expanded="false" />
+            <element signature="e#2618#2640#0" expanded="false" />
+            <element signature="e#2673#2695#0" expanded="false" />
+            <element signature="e#2737#4271#0" expanded="false" />
+            <element signature="e#2737#2769#0" expanded="false" />
+            <element signature="e#2995#4271#0" expanded="false" />
+            <element signature="e#3111#3216#0" expanded="false" />
+            <element signature="e#3459#3771#0" expanded="false" />
+            <element signature="e#3919#4163#0" expanded="false" />
+            <element signature="e#4317#4437#0" expanded="false" />
+            <element signature="e#4478#4628#0" expanded="false" />
+            <element signature="e#4672#4720#0" expanded="false" />
           </folding>
         </state>
       </provider>
