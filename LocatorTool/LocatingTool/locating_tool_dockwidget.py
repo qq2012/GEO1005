@@ -62,10 +62,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 #NEWNEWNEWNEWNENEWNEW
 
         self.openFireButton.clicked.connect(self.openFire)
-        self.minDistButton.clicked.connect(self.minDist)
-        self.maxDistButton.clicked.connect(self.maxDist)
+        self.minMaxBufferButton.clicked.connect(self.minMaxDist)
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
         # initialisation
+
 #NEWNEWNEWNEWNEWNEWNEW
         self.updateLayers()
 #NEWNEWNEWNEWNEWNEWNEW
@@ -76,16 +76,14 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if new_file:
             self.iface.addProject(unicode(new_file))
 
-    def minDist(self):
-        self.calculateBuffer()
-
-    def maxDist(self):
-        self.calculateBuffer()
+    def minMaxDist(self):
+        self.calculateBuffer('max')
+        self.calculateBuffer('min')
 
 #NEWNEWNEWNEWNEW
     def updateLayers(self):
         layers = uf.getLegendLayers(self.iface, 'all', 'all')
-        self.selectLayerCombo.clear()
+        #self.selectLayerCombo.clear()
         if layers:
             layer_names = uf.getLayersListNames(layers)
             self.selectLayerCombo.addItems(layer_names)
@@ -106,32 +104,40 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         layer = uf.getLegendLayerByName(self.iface,layer_name)
         return layer
 
-    def getBufferCutoff(self):
-        cutoff = self.minDistLineEdit.text()
+    def getBufferCutoff(self, minmax):
+        if minmax == 'min':
+            cutoff = self.minDistLineEdit.text()
+        elif minmax == 'max':
+            cutoff = self.maxDistLineEdit.text()
         if uf.isNumeric(cutoff):
             return uf.convertNumeric(cutoff)
         else:
             return 0
 
-    def calculateBuffer(self):
+    def calculateBuffer(self, minmax):
         origins = self.getSelectedLayer().selectedFeatures()
         layer = self.getSelectedLayer()
+        if minmax == 'min':
+            buffer_layer_name = "MinDistBuffer"
+        elif minmax == 'max':
+            buffer_layer_name = "MaxDistBuffer"
         if origins > 0:
-            cutoff_distance = self.getBufferCutoff()
+            cutoff_distance = self.getBufferCutoff(minmax)
             buffers = {}
             for point in origins:
                 geom = point.geometry()
                 buffers[point.id()] = geom.buffer(cutoff_distance,12).asPolygon()
 
             # store the buffer results in temporary layer called "Buffers"
-            buffer_layer = uf.getLegendLayerByName(self.iface, "Buffers")
+
+            buffer_layer = uf.getLegendLayerByName(self.iface, buffer_layer_name)
             # create one if it doesn't exist
             if not buffer_layer:
                 attribs = ['id', 'distance']
                 types = [QtCore.QVariant.String, QtCore.QVariant.Double]
-                buffer_layer = uf.createTempLayer('Buffers','POLYGON',layer.crs().postgisSrid(), attribs, types)
+                buffer_layer = uf.createTempLayer(buffer_layer_name,'POLYGON',layer.crs().postgisSrid(), attribs, types)
                 uf.loadTempLayer(buffer_layer)
-                buffer_layer.setLayerName('Buffers')
+                buffer_layer.setLayerName(buffer_layer_name)
             # insert buffer polygons
             geoms = []
             values = []
