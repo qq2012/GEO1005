@@ -72,28 +72,37 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def maxDist(self):
         self.calculateBuffer()
 
+    def getSelectedLayer(self):
+        layer_name = self.selectLayerCombo.currentText()
+        layer = uf.getLegendLayerByName(self.iface,layer_name)
+        return layer
+
+    def getBufferCutoff(self):
+        cutoff = self.minDistLineEdit.text()
+        if uf.isNumeric(cutoff):
+            return uf.convertNumeric(cutoff)
+        else:
+            return 0
 
     def calculateBuffer(self):
-        #layer = self.getSelectedLayer()
-        #origins = self.getSelectedLayer().selectedFeatures()
-        layer = uf.getLegendLayerByName(self.iface, "Fire1")
-        origins = uf.selectFeaturesByExpression(layer, "id > 0")
-
+        origins = self.getSelectedLayer().selectedFeatures()
+        layer = self.getSelectedLayer()
         if origins > 0:
             cutoff_distance = self.getBufferCutoff()
             buffers = {}
             for point in origins:
                 geom = point.geometry()
                 buffers[point.id()] = geom.buffer(cutoff_distance,12).asPolygon()
+
             # store the buffer results in temporary layer called "Buffers"
-            buffer_layer = uf.getLegendLayerByName(self.iface, "Buffer")
+            buffer_layer = uf.getLegendLayerByName(self.iface, "Buffers")
             # create one if it doesn't exist
             if not buffer_layer:
                 attribs = ['id', 'distance']
                 types = [QtCore.QVariant.String, QtCore.QVariant.Double]
-                buffer_layer = uf.createTempLayer('Buffer','POLYGON',layer.crs().postgisSrid(), attribs, types)
+                buffer_layer = uf.createTempLayer('Buffers','POLYGON',layer.crs().postgisSrid(), attribs, types)
                 uf.loadTempLayer(buffer_layer)
-                buffer_layer.setLayerName('Buffer')
+                buffer_layer.setLayerName('Buffers')
             # insert buffer polygons
             geoms = []
             values = []
@@ -111,12 +120,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.canvas.refresh()
 
-    def getBufferCutoff(self):
-        cutoff = self.bufferCutoffEdit.text()
-        if uf.isNumeric(cutoff):
-            return uf.convertNumeric(cutoff)
-        else:
-            return 0
 
 
     def closeEvent(self, event):
