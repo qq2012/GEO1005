@@ -54,11 +54,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # set up GUI operation signals
         # data
 
+#NEWNEWNEWNEWNEWNEWNEW
+        self.iface.projectRead.connect(self.updateLayers)
+        self.iface.newProjectCreated.connect(self.updateLayers)
+        self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
+        self.iface.legendInterface().itemAdded.connect(self.updateLayers)
+#NEWNEWNEWNEWNENEWNEW
+
         self.openFireButton.clicked.connect(self.openFire)
         self.minDistButton.clicked.connect(self.minDist)
         self.maxDistButton.clicked.connect(self.maxDist)
-
+        self.selectLayerCombo.activated.connect(self.setSelectedLayer)
         # initialisation
+#NEWNEWNEWNEWNEWNEWNEW
+        self.updateLayers()
+#NEWNEWNEWNEWNEWNEWNEW
 
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
@@ -71,6 +81,25 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def maxDist(self):
         self.calculateBuffer()
+
+#NEWNEWNEWNEWNEW
+    def updateLayers(self):
+        layers = uf.getLegendLayers(self.iface, 'all', 'all')
+        self.selectLayerCombo.clear()
+        if layers:
+            layer_names = uf.getLayersListNames(layers)
+            self.selectLayerCombo.addItems(layer_names)
+            self.setSelectedLayer()
+        else:
+            self.selectAttributeCombo.clear()
+            self.clearChart()
+#NEWNEWNEWNEWNEW
+
+
+    def setSelectedLayer(self):
+        layer_name = self.selectLayerCombo.currentText()
+        layer = uf.getLegendLayerByName(self.iface,layer_name)
+        #self.updateAttributes(layer)
 
     def getSelectedLayer(self):
         layer_name = self.selectLayerCombo.currentText()
