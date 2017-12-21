@@ -59,7 +59,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.iface.newProjectCreated.connect(self.updateLayers)
         self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         self.iface.legendInterface().itemAdded.connect(self.updateLayers)
-#NEWNEWNEWNEWNENEWNEW
+        self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
+
+        #NEWNEWNEWNEWNENEWNEW
 
         self.openFireButton.clicked.connect(self.openFire)
         self.minMaxBufferButton.clicked.connect(self.minMaxDist)
@@ -79,6 +81,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def minMaxDist(self):
         self.calculateBuffer('max')
         self.calculateBuffer('min')
+        #self.difference()
 
 #NEWNEWNEWNEWNEW
     def updateLayers(self):
@@ -148,6 +151,18 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 values.append([buffer[0],cutoff_distance])
             uf.insertTempFeatures(buffer_layer, geoms, values)
             self.refreshCanvas(buffer_layer)
+
+    def difference(self):
+        maxlayer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
+        minlayer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
+        geom = maxlayer.geometry()
+        geom.difference(maxlayer, minlayer)
+
+    def chooseWindDirection(self):
+        chooestext = self.chooseWindDirectionCombo.currentText()
+        direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
+        WindDirection = direction[chooestext]
+        return WindDirection
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
