@@ -26,6 +26,7 @@ import os.path
 
 from PyQt4 import QtGui, QtCore, uic
 from PyQt4.QtCore import pyqtSignal
+import processing
 
 from . import utility_functions as uf
 
@@ -92,6 +93,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.selectLayerCombo.addItems(layer_names)
             self.setSelectedLayer()
         else:
+            self.selectAttributeCombo.clear()
             self.clearChart()
 #NEWNEWNEWNEWNEW
 
@@ -136,7 +138,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             # create one if it doesn't exist
             if not buffer_layer:
                 attribs = ['id', 'distance']
-                types = [QtCore.QVariant.String, QtCore.QVariant.Double]
+                types = [QtCore.QVariant.Int, QtCore.QVariant.Double]
                 buffer_layer = uf.createTempLayer(buffer_layer_name,'POLYGON',layer.crs().postgisSrid(), attribs, types)
                 uf.loadTempLayer(buffer_layer)
                 buffer_layer.setLayerName(buffer_layer_name)
@@ -161,9 +163,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         layer = self.getSelectedLayer()
         max_buffer_layer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
         min_buffer_layer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
-        if max_buffer_layer and layer:# and not min_buffer_layer:
-            uf.selectFeaturesByIntersection(layer, max_buffer_layer, True) and uf.selectFeaturesByIntersection(layer, min_buffer_layer, False)
-        
+        #diff_buffer_layer = processing.runandload('qgis:difference', max_buffer_layer, min_buffer_layer, None)
+
+        #uf.selectFeaturesByIntersection(layer, diff_buffer_layer, True)
+        #feat_max = uf.getFeaturesByIntersection(layer, max_buffer_layer, True)
+        #feat_min = uf.getFeaturesByIntersection(layer, min_buffer_layer, True)
+        #feat_end = []
+        #for feat in feat_max:
+        #    if feat not in feat_min:
+        #        feat_end.append(feat)
+        #uf.selectFeaturesByListValues(layer, 'id', feat_end)
+        if max_buffer_layer and layer:
+            uf.selectFeaturesByIntersection(layer, max_buffer_layer, True)
+        #elif max_buffer_layer and layer and min_buffer_layer:
+        #    uf.selectFeaturesByExpression(layer, uf.getFeaturesByIntersection(max_buffer_layer, min_buffer_layer, False))
+
         #elif max_buffer_layer and layer and min_buffer_layer:
         #    uf.selectFeaturesByIntersection(layer, uf.selectFeaturesByExpression(max_buffer_layer, min_buffer_layer, False), True
 
