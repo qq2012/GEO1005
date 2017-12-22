@@ -1,13 +1,5 @@
-git commit -m 'Remove the now ignored directory "MoveConmanderCentral"'
-git push origin 2017-group2
-*.iml
-*.html
-*.py
-LocatorTool/LocatingTool/help/build/html/.buildinfo
-*.qrc
-*.sh
-*.asc
-*.rar
-test for new branch
-data_MCC/MCC_proj_2.qgs
-data_MCC/MCC_proj_2.qgs
+.DS_Store
+.idea
+.workspace.xml
+*.pyc
+help/

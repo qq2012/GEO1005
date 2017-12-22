@@ -60,8 +60,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         self.iface.legendInterface().itemAdded.connect(self.updateLayers)
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
-
-        #NEWNEWNEWNEWNENEWNEW
+        self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
+#NEWNEWNEWNEWNENEWNEW
 
         self.openFireButton.clicked.connect(self.openFire)
         self.minMaxBufferButton.clicked.connect(self.minMaxDist)
@@ -81,7 +81,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def minMaxDist(self):
         self.calculateBuffer('max')
         self.calculateBuffer('min')
-        #self.difference()
+
 
 #NEWNEWNEWNEWNEW
     def updateLayers(self):
@@ -92,7 +92,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.selectLayerCombo.addItems(layer_names)
             self.setSelectedLayer()
         else:
-            self.selectAttributeCombo.clear()
             self.clearChart()
 #NEWNEWNEWNEWNEW
 
@@ -152,17 +151,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             uf.insertTempFeatures(buffer_layer, geoms, values)
             self.refreshCanvas(buffer_layer)
 
-    def difference(self):
-        maxlayer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
-        minlayer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
-        geom = maxlayer.geometry()
-        geom.difference(maxlayer, minlayer)
-
     def chooseWindDirection(self):
         chooestext = self.chooseWindDirectionCombo.currentText()
         direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
         WindDirection = direction[chooestext]
         return WindDirection
+
+    def selectFeaturesBuffer(self):
+        layer = self.getSelectedLayer()
+        max_buffer_layer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
+        min_buffer_layer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
+        if max_buffer_layer and layer:# and not min_buffer_layer:
+            uf.selectFeaturesByIntersection(layer, max_buffer_layer, True) and uf.selectFeaturesByIntersection(layer, min_buffer_layer, False)
+        
+        #elif max_buffer_layer and layer and min_buffer_layer:
+        #    uf.selectFeaturesByIntersection(layer, uf.selectFeaturesByExpression(max_buffer_layer, min_buffer_layer, False), True
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():

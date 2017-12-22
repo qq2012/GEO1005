@@ -21,13 +21,6 @@
     <item row="2" column="1">
      <widget class="QComboBox" name="selectLayerCombo"/>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="selectLayerLabel">
-      <property name="text">
-       <string>Select Layer</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QPushButton" name="openFireButton">
       <property name="sizePolicy">
@@ -41,6 +34,32 @@
       </property>
      </widget>
     </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Min Distance</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Wind Direction</string>
+      </property>
+     </widget>
+    </item>
     <item row="6" column="1">
      <widget class="QLineEdit" name="minDistLineEdit">
       <property name="sizePolicy">
@@ -51,6 +70,13 @@
       </property>
       <property name="text">
        <string>500</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="selectLayerLabel">
+      <property name="text">
+       <string>Select Layer</string>
       </property>
      </widget>
     </item>
@@ -84,32 +110,6 @@
       </property>
       <property name="text">
        <string>1500</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="label">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Min Distance</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Wind Direction</string>
       </property>
      </widget>
     </item>
@@ -166,6 +166,13 @@
         <string>NW</string>
        </property>
       </item>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="selectInBufferButton">
+      <property name="text">
+       <string>Select in Buffer</string>
+      </property>
      </widget>
     </item>
    </layout>
