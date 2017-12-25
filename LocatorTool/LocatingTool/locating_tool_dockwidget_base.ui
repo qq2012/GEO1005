@@ -256,6 +256,16 @@
        <attribute name="title">
         <string>Results</string>
        </attribute>
+       <widget class="QTableWidget" name="locationTable">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>40</y>
+          <width>256</width>
+          <height>192</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>

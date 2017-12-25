@@ -37,6 +37,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
+    updateAttribute = QtCore.pyqtSignal(str)
 
     def __init__(self, iface, parent=None):
         """Constructor."""
@@ -67,6 +68,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.openFireButton.clicked.connect(self.openFire)
         self.minMaxBufferButton.clicked.connect(self.minMaxDist)
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
+
+        # results tab
+        self.updateAttribute.connect(self.extractAttributeSummary)
+
         # initialisation
 
 #NEWNEWNEWNEWNEWNEWNEW
@@ -187,7 +192,38 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.canvas.refresh()
 
+#################
+#   Reporting tab
+#################
 
+    def extractAttributeSummary(self, attribute):
+        # get summary of the attribute
+        layer = self.getSelectedLayer()
+        uf.showMessage(self.iface, 'this is layer: {}'.format(layer), dur=10)
+        summary = []
+        # only use the first attribute in the list
+        for feature in layer.getFeatures():
+            summary.append((feature.id(), feature.attribute(attribute)))
+        # send this to the table
+        self.clearTable()
+        self.updateTable(summary)
+
+    # table window functions
+    def updateTable(self, values):
+        # takes a list of label / value pairs, can be tuples or lists. not dictionaries to control order
+        self.locationTable.setColumnCount(2)
+        self.locationTable.setHorizontalHeaderLabels(["Item","Value"])
+        self.locationTable.setRowCount(len(values))
+        for i, item in enumerate(values):
+            # i is the table row, items must tbe added as QTableWidgetItems
+            self.locationTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[0])))
+            self.locationTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1])))
+        self.locationTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.locationTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
+        self.locationTable.resizeRowsToContents()
+
+    def clearTable(self):
+        self.locationTable.clear()
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
