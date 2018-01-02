@@ -56,27 +56,23 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # set up GUI operation signals
         # data
 
-#NEWNEWNEWNEWNEWNEWNEW
         self.iface.projectRead.connect(self.updateLayers)
         self.iface.newProjectCreated.connect(self.updateLayers)
         self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         self.iface.legendInterface().itemAdded.connect(self.updateLayers)
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
-#NEWNEWNEWNEWNENEWNEW
 
         self.openFireButton.clicked.connect(self.openFire)
-        self.minMaxBufferButton.clicked.connect(self.minMaxDist)
+        self.minMaxBufferButton.clicked.connect(self.calculateDonut())
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
 
         # results tab
         self.updateAttribute.connect(self.extractAttributeSummary)
 
         # initialisation
-
-#NEWNEWNEWNEWNEWNEWNEW
         self.updateLayers()
-#NEWNEWNEWNEWNEWNEWNEW
+
 
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
@@ -84,15 +80,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if new_file:
             self.iface.addProject(unicode(new_file))
 
-    def minMaxDist(self):
-        self.calculateBuffer('max')
-        self.calculateBuffer('min')
 
-
-#NEWNEWNEWNEWNEW
     def updateLayers(self):
         layers = uf.getLegendLayers(self.iface, 'all', 'all')
-        #self.selectLayerCombo.clear()
+        self.selectLayerCombo.clear()
         if layers:
             layer_names = uf.getLayersListNames(layers)
             self.selectLayerCombo.addItems(layer_names)
@@ -100,7 +91,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.selectAttributeCombo.clear()
             self.clearChart()
-#NEWNEWNEWNEWNEW
 
 
     def setSelectedLayer(self):
@@ -113,78 +103,47 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         layer = uf.getLegendLayerByName(self.iface,layer_name)
         return layer
 
-    def getBufferCutoff(self, minmax):
-        if minmax == 'min':
-            cutoff = self.minDistLineEdit.text()
-        elif minmax == 'max':
-            cutoff = self.maxDistLineEdit.text()
+    def getMinBufferCutoff(self):
+        cutoff = self.minDistLineEdit.text()
         if uf.isNumeric(cutoff):
             return uf.convertNumeric(cutoff)
         else:
             return 0
 
-    def calculateBuffer(self, minmax):
-        origins = self.getSelectedLayer().selectedFeatures()
+    def getMaxBufferCutoff(self):
+        cutoff = self.maxDistLineEdit.text()
+        if uf.isNumeric(cutoff):
+            return uf.convertNumeric(cutoff)
+        else:
+            return 0
+
+    def calculateDonut(self):
+        #open layer
         layer = self.getSelectedLayer()
-        if minmax == 'min':
-            buffer_layer_name = "MinDistBuffer"
-        elif minmax == 'max':
-            buffer_layer_name = "MaxDistBuffer"
-        if origins > 0:
-            cutoff_distance = self.getBufferCutoff(minmax)
-            buffers = {}
-            for point in origins:
-                geom = point.geometry()
-                buffers[point.id()] = geom.buffer(cutoff_distance,12).asPolygon()
 
-            # store the buffer results in temporary layer called "Buffers"
+        #create the buffers needed min and max
+        max_dist = self.getMaxBufferCutoff()
+        min_dist = self.getMinBufferCutoff()
+        MaxBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, max_dist, 12, False, None)
+        MinBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, min_dist, 12, False, None)
 
-            buffer_layer = uf.getLegendLayerByName(self.iface, buffer_layer_name)
-            # create one if it doesn't exist
-            if not buffer_layer:
-                attribs = ['id', 'distance']
-                types = [QtCore.QVariant.Int, QtCore.QVariant.Double]
-                buffer_layer = uf.createTempLayer(buffer_layer_name,'POLYGON',layer.crs().postgisSrid(), attribs, types)
-                uf.loadTempLayer(buffer_layer)
-                buffer_layer.setLayerName(buffer_layer_name)
-            # insert buffer polygons
-            geoms = []
-            values = []
-            for buffer in buffers.iteritems():
-                # each buffer has an id and a geometry
-                geoms.append(buffer[1])
-                # in the case of values, it expects a list of multiple values in each item - list of lists
-                values.append([buffer[0],cutoff_distance])
-            uf.insertTempFeatures(buffer_layer, geoms, values)
-            self.refreshCanvas(buffer_layer)
+        #create the donut (difference)
+        processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
+
 
     def chooseWindDirection(self):
-        chooestext = self.chooseWindDirectionCombo.currentText()
+        choosetext = self.chooseWindDirectionCombo.currentText()
         direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
-        WindDirection = direction[chooestext]
+        WindDirection = direction[choosetext]
         return WindDirection
 
     def selectFeaturesBuffer(self):
         layer = self.getSelectedLayer()
         max_buffer_layer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
         min_buffer_layer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
-        #diff_buffer_layer = processing.runandload('qgis:difference', max_buffer_layer, min_buffer_layer, None)
 
-        #uf.selectFeaturesByIntersection(layer, diff_buffer_layer, True)
-        #feat_max = uf.getFeaturesByIntersection(layer, max_buffer_layer, True)
-        #feat_min = uf.getFeaturesByIntersection(layer, min_buffer_layer, True)
-        #feat_end = []
-        #for feat in feat_max:
-        #    if feat not in feat_min:
-        #        feat_end.append(feat)
-        #uf.selectFeaturesByListValues(layer, 'id', feat_end)
         if max_buffer_layer and layer:
             uf.selectFeaturesByIntersection(layer, max_buffer_layer, True)
-        #elif max_buffer_layer and layer and min_buffer_layer:
-        #    uf.selectFeaturesByExpression(layer, uf.getFeaturesByIntersection(max_buffer_layer, min_buffer_layer, False))
-
-        #elif max_buffer_layer and layer and min_buffer_layer:
-        #    uf.selectFeaturesByIntersection(layer, uf.selectFeaturesByExpression(max_buffer_layer, min_buffer_layer, False), True
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
@@ -192,9 +151,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.canvas.refresh()
 
-#################
-#   Reporting tab
-#################
+            #################
+            #   Reporting tab
+            #################
 
     def extractAttributeSummary(self, attribute):
         # get summary of the attribute
