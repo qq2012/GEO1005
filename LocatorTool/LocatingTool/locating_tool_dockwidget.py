@@ -26,6 +26,7 @@ import os.path
 
 from PyQt4 import QtGui, QtCore, uic
 from PyQt4.QtCore import pyqtSignal
+from qgis.core import *
 import processing
 
 from . import utility_functions as uf
@@ -66,6 +67,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.openFireButton.clicked.connect(self.openFire)
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
+        self.selectFireSeverityCombo.activated.connect(self.updateDistances)
+        self.clearBuffersButton.clicked.connect(self.clearBuffers)
 
         # results tab
         self.updateAttribute.connect(self.extractAttributeSummary)
@@ -92,6 +95,27 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.selectAttributeCombo.clear()
             self.clearChart()
 
+    def updateDistances(self):
+        severity = self.selectFireSeverityCombo.currentText()
+        if severity == 'GRIP 1':
+            self.minDistLineEdit.setText(str(100))
+            self.maxDistLineEdit.setText(str(750))
+        elif severity == 'GRIP 2':
+            self.minDistLineEdit.setText(str(250))
+            self.maxDistLineEdit.setText(str(1000))
+        elif severity == 'GRIP 3':
+            self.minDistLineEdit.setText(str(400))
+            self.maxDistLineEdit.setText(str(1250))
+        elif severity == 'GRIP 4':
+            self.minDistLineEdit.setText(str(500))
+            self.maxDistLineEdit.setText(str(1250))
+        elif severity == 'GRIP 5':
+            self.minDistLineEdit.setText(str(500))
+            self.maxDistLineEdit.setText(str(1500))
+
+    def clearBuffers(self):
+        buffer_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
 
     def setSelectedLayer(self):
         layer_name = self.selectLayerCombo.currentText()
@@ -130,7 +154,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #create the donut (difference)
         donut = processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
-
+        self.refreshCanvas(donut)
     def chooseWindDirection(self):
         choosetext = self.chooseWindDirectionCombo.currentText()
         direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
