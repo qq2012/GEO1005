@@ -320,9 +320,9 @@
        <widget class="QTableWidget" name="statisticsTable">
         <property name="geometry">
          <rect>
-          <x>70</x>
+          <x>30</x>
           <y>40</y>
-          <width>256</width>
+          <width>451</width>
           <height>192</height>
          </rect>
         </property>

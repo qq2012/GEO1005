@@ -38,7 +38,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
-    updateAttribute = QtCore.pyqtSignal(str)
+    updateAttribute = QtCore.pyqtSignal(list)
 
     def __init__(self, iface, parent=None):
         """Constructor."""
@@ -93,7 +93,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.setSelectedLayer()
         else:
             self.selectAttributeCombo.clear()
-            self.clearChart()
+            # self.clearChart()
 
     def updateDistances(self):
         severity = self.selectFireSeverityCombo.currentText()
@@ -118,14 +118,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
 
     def setSelectedLayer(self):
-        layer_name = self.selectLayerCombo.currentText()
-        layer = uf.getLegendLayerByName(self.iface,layer_name)
-        #self.updateAttributes(layer)
+        # layer_name = self.selectLayerCombo.currentText()
+        # layer = uf.getLegendLayerByName(self.iface,layer_name)
+        self.setSelectedAttribute() #before: self.updateAttributes(layer)
 
     def getSelectedLayer(self):
         layer_name = self.selectLayerCombo.currentText()
         layer = uf.getLegendLayerByName(self.iface,layer_name)
         return layer
+
+
+    def setSelectedAttribute(self):
+        # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
+        layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
+        fields = uf.getFieldNames(layer)
+        self.updateAttribute.emit(fields)
 
     def getMinBufferCutoff(self):
         cutoff = self.minDistLineEdit.text()
@@ -174,32 +181,40 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.canvas.refresh()
 
-            #################
-            #   Reporting tab
-            #################
+    #################
+    #   Reporting tab
+    #################
 
     def extractAttributeSummary(self, attribute):
         # get summary of the attribute
-        layer = self.getSelectedLayer()
-        uf.showMessage(self.iface, 'this is layer: {}'.format(layer), dur=10)
+        # TODO: should layer (variable) be retrieved by name always?
+        # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
+        layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
         summary = []
         # only use the first attribute in the list
         for feature in layer.getFeatures():
-            summary.append((feature.id(), feature.attribute(attribute)))
+            row = [] #contains all the attributes for the current feature
+            for col_name in attribute:
+                row.append((feature.attribute(col_name)))
+            summary.append(row)
+
         # send this to the table
         self.clearTable()
         self.updateTable(summary)
 
     # table window functions
     def updateTable(self, values):
-        # takes a list of label / value pairs, can be tuples or lists. not dictionaries to control order
-        self.statisticsTable.setColumnCount(2)
-        self.statisticsTable.setHorizontalHeaderLabels(["Item","Value"])
+        self.statisticsTable.setColumnCount(3)
+        self.statisticsTable.setHorizontalHeaderLabels(["ID", "Landuse", "Area"])
         self.statisticsTable.setRowCount(len(values))
-        for i, item in enumerate(values):
+        i = 0
+        for item in values:
             # i is the table row, items must tbe added as QTableWidgetItems
-            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[0])))
-            self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1])))
+            # self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(i)))
+            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[3]))) #ID
+            self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #Landuse
+            self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[4]))) #Area
+            i += 1
         self.statisticsTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         self.statisticsTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
         self.statisticsTable.resizeRowsToContents()
