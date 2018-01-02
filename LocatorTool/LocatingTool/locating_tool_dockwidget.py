@@ -193,19 +193,19 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     # table window functions
     def updateTable(self, values):
         # takes a list of label / value pairs, can be tuples or lists. not dictionaries to control order
-        self.locationTable.setColumnCount(2)
-        self.locationTable.setHorizontalHeaderLabels(["Item","Value"])
-        self.locationTable.setRowCount(len(values))
+        self.statisticsTable.setColumnCount(2)
+        self.statisticsTable.setHorizontalHeaderLabels(["Item","Value"])
+        self.statisticsTable.setRowCount(len(values))
         for i, item in enumerate(values):
             # i is the table row, items must tbe added as QTableWidgetItems
-            self.locationTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[0])))
-            self.locationTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1])))
-        self.locationTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
-        self.locationTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
-        self.locationTable.resizeRowsToContents()
+            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[0])))
+            self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1])))
+        self.statisticsTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.statisticsTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
+        self.statisticsTable.resizeRowsToContents()
 
     def clearTable(self):
-        self.locationTable.clear()
+        self.statisticsTable.clear()
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
