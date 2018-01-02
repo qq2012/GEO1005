@@ -64,7 +64,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
         self.openFireButton.clicked.connect(self.openFire)
-        self.minMaxBufferButton.clicked.connect(self.calculateDonut())
+        self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
 
         # results tab
@@ -128,7 +128,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         MinBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, min_dist, 12, False, None)
 
         #create the donut (difference)
-        processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
+        donut = processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
 
     def chooseWindDirection(self):
@@ -139,11 +139,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def selectFeaturesBuffer(self):
         layer = self.getSelectedLayer()
-        max_buffer_layer = uf.getLegendLayerByName(self.iface, "MaxDistBuffer")
-        min_buffer_layer = uf.getLegendLayerByName(self.iface, "MinDistBuffer")
+        intersect_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
 
-        if max_buffer_layer and layer:
-            uf.selectFeaturesByIntersection(layer, max_buffer_layer, True)
+        if layer and intersect_layer:
+            uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
