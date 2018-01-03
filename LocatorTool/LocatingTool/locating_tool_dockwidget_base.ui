@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>349</height>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -304,12 +304,38 @@
          <rect>
           <x>150</x>
           <y>230</y>
-          <width>136</width>
+          <width>131</width>
           <height>32</height>
          </rect>
         </property>
         <property name="text">
          <string>Clear Buffer(s)</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="markAreasButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>270</y>
+          <width>136</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Mark/Highlight</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="clearMarkedButton">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>270</y>
+          <width>136</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Clear Marked</string>
         </property>
        </widget>
       </widget>

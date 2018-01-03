@@ -69,10 +69,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
+        self.markAreasButton.clicked.connect(self.markAreas)
+        self.clearMarkedButton.clicked.connect(self.clearMarked)
 
         # results tab
         """TEMPORARILY DISABLED AS IT SLOWS """
-        self.updateAttribute.connect(self.extractAttributeSummary)
+        # self.updateAttribute.connect(self.extractAttributeSummary)
 
         # initialisation
         self.updateLayers()
@@ -114,9 +116,18 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.minDistLineEdit.setText(str(500))
             self.maxDistLineEdit.setText(str(1500))
 
-    def clearBuffers(self):
-        buffer_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
-        QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
+    def clearBuffers(self, buffer_layer=0):
+        if not buffer_layer:
+            buffer_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+            QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
+            self.clearBuffers()
+        elif buffer_layer:
+            QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
+
+    def clearMarked(self):
+        marked_layer = uf.getLegendLayerByName(self.iface, "Selection")
+        if marked_layer:
+            self.clearBuffers(marked_layer)
 
     def setSelectedLayer(self):
         # layer_name = self.selectLayerCombo.currentText()
@@ -170,12 +181,29 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         WindDirection = direction[choosetext]
         return WindDirection
 
-    def selectFeaturesBuffer(self):
-        layer = self.getSelectedLayer()
+    def selectFeaturesBuffer(self, layer=0):
+        #Add possibility of loading def with pre-set layer
+        if not layer:
+            layer = self.getSelectedLayer()
+
         intersect_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
 
         if layer and intersect_layer:
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
+
+    def markAreas(self):
+        result_area = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas")
+        #Check possibility of this function
+        if result_area and ok_areas:
+            self.selectFeaturesBuffer(ok_areas)
+            processing.runandload('qgis:saveselectedfeatures', ok_areas, None)
+            testname = uf.getLegendLayerByName(self.iface, "Selection")
+            path = "%s/styles/" % QgsProject.instance().homePath()
+            processing.runalg('qgis:setstyleforvectorlayer', testname, "%sok_areas_style.qml" % path)
+            ok_areas.removeSelection()
+        else:
+            pass
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
