@@ -71,6 +71,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
 
         # results tab
+        """TEMPORARILY DISABLED AS IT SLOWS """
         self.updateAttribute.connect(self.extractAttributeSummary)
 
         # initialisation
@@ -93,7 +94,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.setSelectedLayer()
         else:
             self.selectAttributeCombo.clear()
-            # self.clearChart()
+            self.clearChart()
 
     def updateDistances(self):
         severity = self.selectFireSeverityCombo.currentText()
@@ -161,7 +162,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #create the donut (difference)
         donut = processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
-        self.refreshCanvas(donut)
+        #self.refreshCanvas(donut)
+
     def chooseWindDirection(self):
         choosetext = self.chooseWindDirectionCombo.currentText()
         direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
@@ -188,7 +190,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def extractAttributeSummary(self, attribute):
         # get summary of the attribute
         # TODO: should layer (variable) be retrieved by name always?
+        """   ROB: Can also be done differently, but if it works it works.. Right? """
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
+        """   SUGGESTION:   Can we make it so that this table only does something when 
+                            suitable/ok areas are calculated from the buffer? As of now
+                            it's slowing the entire plugin a bit!                  """
+
+
         layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
         summary = []
         # only use the first attribute in the list

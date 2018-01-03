@@ -336,15 +336,6 @@ def getFeaturesByExpression(layer, expression):
             features[feature.id()] = feature.attributes()
     return features
 
-def getFeaturesByExpression2(layer, expression):
-    features = []
-    if layer:
-        request = QgsFeatureRequest().setFilterExpression(expression)
-        iterator = layer.getFeatures(request)
-        for feature in iterator:
-            features.append(feature.attributes())
-    return features
-
 def selectFeaturesByExpression(layer, expression):
     features = []
     if layer:
