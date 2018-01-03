@@ -71,10 +71,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
         self.markAreasButton.clicked.connect(self.markAreas)
         self.clearMarkedButton.clicked.connect(self.clearMarked)
+        self.calculateConeButton.clicked.connect(self.calculateCone)
 
         # results tab
-        """TEMPORARILY DISABLED AS IT SLOWS """
-        # self.updateAttribute.connect(self.extractAttributeSummary)
+        #self.updateAttribute.connect(self.extractAttributeSummary)
 
         # initialisation
         self.updateLayers()
@@ -202,8 +202,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             path = "%s/styles/" % QgsProject.instance().homePath()
             processing.runalg('qgis:setstyleforvectorlayer', testname, "%sok_areas_style.qml" % path)
             ok_areas.removeSelection()
-        else:
-            pass
+
+    def calculateCone(self):
+        #self.iface.messageBar().pushMessage("Check", "{}".format("check"), level=0, duration=5)
+        if self.chooseWindDirectionCombo.currentText() == 'no wind':
+            #Create points in a line
+            processing.runandload('qgis:regularpoints', "93480.305288,93540.305288,434392.208059,436392.208059", 100, 0, False, True, None)
+
+            #create attribute named width (id * 60)
+            layer = uf.getLegendLayerByName(self.iface, "Regular points")
+            processing.runandload('qgis:fieldcalculator', layer, "width", 0, 10, 0, True, ' "id" * 60', None)
+
+            #Create variabledistancebuffer on attribute width
+            layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
+            processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
+
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():

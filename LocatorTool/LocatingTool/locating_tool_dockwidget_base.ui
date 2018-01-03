@@ -338,6 +338,19 @@
          <string>Clear Marked</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="calculateConeButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>310</y>
+          <width>136</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Create Cone</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
