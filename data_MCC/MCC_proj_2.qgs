@@ -11,7 +11,7 @@
     <layer-tree-layer expanded="1" providerKey="ogr" checked="Qt::Checked" id="Fire220171214095353464" source="C:/Users/Rob/Documents/GitHub/GEO1005_2017_group2/data_MCC/Fire2.shp" name="Fire2">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" providerKey="ogr" checked="Qt::Checked" id="Fire320171214101608583" source="C:/Users/Rob/Documents/GitHub/GEO1005_2017_group2/data_MCC/Fire3.shp" name="Fire3">
+    <layer-tree-layer expanded="1" providerKey="ogr" checked="Qt::Checked" id="Fire320180103122404051" source="C:/Users/Rob/Documents/GitHub/GEO1005_2017_group2/data_MCC/Fire3.shp" name="Fire3">
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" providerKey="ogr" checked="Qt::Checked" id="Fire420171214101920387" source="C:/Users/Rob/Documents/GitHub/GEO1005_2017_group2/data_MCC/Fire4.shp" name="Fire4">
@@ -124,11 +124,12 @@
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire2_extent20171214095558059"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214113441552"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214113425333"/>
-      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire320171214101608583"/>
+      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4258" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire320171214101608583"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire220171214095353464"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214122735698"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20180103120418300"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Selection20180103121024329"/>
+      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire320180103122253919"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Selection20180103120629309"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="2016_Rotterdam_parking20171201091159258"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire4_extent20171214101815134"/>
@@ -155,6 +156,7 @@
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="memory_20180102102716478"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214123156706"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buffers20171214121223623"/>
+      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20180103122321337"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="firestation_actual20171214114124026"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="poi20171214112418655"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="FireStation320171214103505382"/>
@@ -186,11 +188,13 @@
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214123045981"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Selection20180103121411413"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings_clip20171220135714373"/>
+      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Fire320180103122404051"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="BAG_2016_Rotterdam_buildings_WO20171201091137601"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214113259350"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20180103121409213"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214122512281"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="ok_areas20180102163312800"/>
+      <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20180103122419086"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:28992" srcDatumTransform="-1" destDatumTransform="-1" layerid="MinDistBuffer20180102103812080"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="shortest_path20171214112955845"/>
       <layer_coordinate_transform destAuthId="EPSG:28992" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Symmetrical_difference20180103121705963"/>
@@ -249,7 +253,6 @@
       <item>Fire220171214095353464</item>
       <item>Fire2_extent20171214095558059</item>
       <item>Fire3_extent20171214095928082</item>
-      <item>Fire320171214101608583</item>
       <item>Fire420171214101920387</item>
       <item>Fire4_extent20171214102119541</item>
       <item>landuse_clip_final20171214102252452</item>
@@ -271,6 +274,7 @@
       <item>F4_evac220171214123213477</item>
       <item>buildings_clip20171220135714373</item>
       <item>ok_areas20180102163312800</item>
+      <item>Fire320180103122404051</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
@@ -284,9 +288,9 @@
         <legendlayerfile isInOverview="0" layerid="Fire220171214095353464" visible="1"/>
       </filegroup>
     </legendlayer>
-    <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Fire3" showFeatureCount="0">
-      <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="Fire320171214101608583" visible="1"/>
+    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Fire3" showFeatureCount="0">
+      <filegroup open="true" hidden="false">
+        <legendlayerfile isInOverview="0" layerid="Fire320180103122404051" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Fire4" showFeatureCount="0">
@@ -4434,13 +4438,7 @@ def my_form_open(dialog, layer, feature):
       <previewExpression></previewExpression>
     </maplayer>
     <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" readOnly="0" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <extent>
-        <xmin>4.47644979053030578</xmin>
-        <ymin>51.92068253058553751</ymin>
-        <xmax>4.47644979053030578</xmax>
-        <ymax>51.92068253058553751</ymax>
-      </extent>
-      <id>Fire320171214101608583</id>
+      <id>Fire320180103122404051</id>
       <datasource>./Fire3.shp</datasource>
       <keywordList>
         <value></value>
@@ -4448,14 +4446,14 @@ def my_form_open(dialog, layer, feature):
       <layername>Fire3</layername>
       <srs>
         <spatialrefsys>
-          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-          <srsid>3452</srsid>
-          <srid>4326</srid>
-          <authid>EPSG:4326</authid>
-          <description>WGS 84</description>
-          <projectionacronym>longlat</projectionacronym>
-          <ellipsoidacronym>WGS84</ellipsoidacronym>
-          <geographicflag>true</geographicflag>
+          <proj4>+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs</proj4>
+          <srsid>2517</srsid>
+          <srid>28992</srid>
+          <authid>EPSG:28992</authid>
+          <description>Amersfoort / RD New</description>
+          <projectionacronym>sterea</projectionacronym>
+          <ellipsoidacronym>bessel</ellipsoidacronym>
+          <geographicflag>false</geographicflag>
         </spatialrefsys>
       </srs>
       <provider encoding="System">ogr</provider>
@@ -9629,7 +9627,6 @@ def my_form_open(dialog, layer, feature):
         <value>Fire1_extent20171214094750440</value>
         <value>Fire220171214095353464</value>
         <value>Fire2_extent20171214095558059</value>
-        <value>Fire320171214101608583</value>
         <value>Fire3_extent20171214095928082</value>
         <value>Fire420171214101920387</value>
         <value>Fire4_extent20171214102119541</value>
@@ -9644,6 +9641,7 @@ def my_form_open(dialog, layer, feature):
         <value>memory_20171214091221180</value>
         <value>ok_areas20180102163312800</value>
         <value>roads_clipped20171214110836586</value>
+        <value>Fire320180103122404051</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
         <value>disabled</value>
@@ -9698,7 +9696,6 @@ def my_form_open(dialog, layer, feature):
         <value>2</value>
         <value>2</value>
         <value>2</value>
-        <value>2</value>
         <value>1</value>
         <value>2</value>
         <value>2</value>
@@ -9706,6 +9703,7 @@ def my_form_open(dialog, layer, feature):
         <value>2</value>
         <value>1</value>
         <value>2</value>
+        <value>1</value>
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
         <value>to_vertex_and_segment</value>
