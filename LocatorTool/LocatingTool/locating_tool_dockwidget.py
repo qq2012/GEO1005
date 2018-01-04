@@ -38,7 +38,6 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
-    # updateAttribute = QtCore.pyqtSignal(list)
 
     def __init__(self, iface, parent=None):
         """Constructor."""
@@ -74,8 +73,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.calculateConeButton.clicked.connect(self.calculateCone)
 
         # results tab
-        """TEMPORARILY DISABLED AS IT SLOWS """
-        #self.updateAttribute.connect(self.extractAttributeSummary)
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
         self.tied_points = []
         self.shortestRouteButton.clicked.connect(self.calculateRoute)
@@ -150,7 +147,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
         layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
         fields = uf.getFieldNames(layer)
-        self.extractAttributeSummary(fields)# self.updateAttribute.emit(fields)
+        self.extractAttributeSummary(fields)
 
     def getMinBufferCutoff(self):
         cutoff = self.minDistLineEdit.text()
@@ -231,7 +228,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # TODO: change roads_clipped to the final road-layer (?)
         roads_layer = uf.getLegendLayerByName(self.iface, 'roads_clipped')
         if roads_layer:
-            # see if there is an obstacles layer to subtract roads from the network
+            # see if there is an obstacles layer to subtract roads from the network TODO: Do we want obstacles??
             obstacles_layer = uf.getLegendLayerByName(self.iface, "Obstacles")
             if obstacles_layer:
                 # retrieve roads outside obstacles (inside = False)
@@ -260,11 +257,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             # build the graph including these points
             if len(source_points) > 1:
                 self.graph, self.tied_points = uf.makeUndirectedGraph(self.network_layer, source_points)
-                # the tied points are the new source_points on the graph
-                # if self.graph and self.tied_points:
-                #     text = "network is built for %s points" % len(self.tied_points)
-                    # self.insertReport(text)
-
         return
 
     def calculateRoute(self):
@@ -295,7 +287,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 # TODO: The cost is inf, fix that!!
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost[destination]]])
             buffer = processing.runandload('qgis:fixeddistancebuffer',routes_layer,10.0,5,False,None)
-            #self.refreshCanvas(routes_layer) """
+            #self.refreshCanvas(routes_layer)
 
     def deleteRoutes(self): #TODO: implement this function?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
@@ -313,7 +305,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.canvas.refresh()
 
     #################
-    #   Reporting tab
+    #   Results tab
     #################
 
     def extractAttributeSummary(self, attribute):
