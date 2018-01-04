@@ -38,7 +38,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
-    updateAttribute = QtCore.pyqtSignal(list)
+    # updateAttribute = QtCore.pyqtSignal(list)
 
     def __init__(self, iface, parent=None):
         """Constructor."""
@@ -66,18 +66,17 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         self.openFireButton.clicked.connect(self.openFire)
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
-        self.selectLayerCombo.activated.connect(self.setSelectedLayer)
+        self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
         self.markAreasButton.clicked.connect(self.markAreas)
         self.clearMarkedButton.clicked.connect(self.clearMarked)
         self.calculateConeButton.clicked.connect(self.calculateCone)
 
-
-
         # results tab
         """TEMPORARILY DISABLED AS IT SLOWS """
         #self.updateAttribute.connect(self.extractAttributeSummary)
+        self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
         self.tied_points = []
         self.shortestRouteButton.clicked.connect(self.calculateRoute)
 
@@ -135,9 +134,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(marked_layer)
 
     def setSelectedLayer(self):
+        """Some buttons use this method but it doesn't do anything since we have commented out everything?"""
         # layer_name = self.selectLayerCombo.currentText()
         # layer = uf.getLegendLayerByName(self.iface,layer_name)
-        self.setSelectedAttribute() #before: self.updateAttributes(layer)
+        # self.setSelectedAttribute() #before: self.updateAttributes(layer)
+        pass
 
     def getSelectedLayer(self):
         layer_name = self.selectLayerCombo.currentText()
@@ -149,7 +150,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
         layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
         fields = uf.getFieldNames(layer)
-        self.updateAttribute.emit(fields)
+        self.extractAttributeSummary(fields)# self.updateAttribute.emit(fields)
 
     def getMinBufferCutoff(self):
         cutoff = self.minDistLineEdit.text()
@@ -222,9 +223,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
 
-            #############################
-            #   Network and route methods
-            #############################
+    #############################
+    #   Network and route methods
+    #############################
 
     def getNetwork(self):
         # TODO: change roads_clipped to the final road-layer (?)
@@ -320,10 +321,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # TODO: should layer (variable) be retrieved by name always?
         """   ROB: Can also be done differently, but if it works it works.. Right? """
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
-        """   SUGGESTION:   Can we make it so that this table only does something when 
-                            suitable/ok areas are calculated from the buffer? As of now
-                            it's slowing the entire plugin a bit!                  """
-
 
         layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
         summary = []
