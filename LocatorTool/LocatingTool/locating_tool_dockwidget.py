@@ -73,8 +73,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearMarkedButton.clicked.connect(self.clearMarked)
         self.calculateConeButton.clicked.connect(self.calculateCone)
 
+
+
         # results tab
+        """TEMPORARILY DISABLED AS IT SLOWS """
         #self.updateAttribute.connect(self.extractAttributeSummary)
+        self.tied_points = []
+        self.shortestRouteButton.clicked.connect(self.calculateRoute)
 
         # initialisation
         self.updateLayers()
@@ -217,6 +222,88 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
 
+            #############################
+            #   Network and route methods
+            #############################
+
+    def getNetwork(self):
+        # TODO: change roads_clipped to the final road-layer (?)
+        roads_layer = uf.getLegendLayerByName(self.iface, 'roads_clipped')
+        if roads_layer:
+            # see if there is an obstacles layer to subtract roads from the network
+            obstacles_layer = uf.getLegendLayerByName(self.iface, "Obstacles")
+            if obstacles_layer:
+                # retrieve roads outside obstacles (inside = False)
+                features = uf.getFeaturesByIntersection(roads_layer, obstacles_layer, False)
+                # add these roads to a new temporary layer
+                road_network = uf.createTempLayer('Temp_Network','LINESTRING',roads_layer.crs().postgisSrid(),[],[])
+                road_network.dataProvider().addFeatures(features)
+            else:
+                road_network = roads_layer
+            return road_network
+        else:
+            return
+
+    def buildNetwork(self):
+        self.network_layer = self.getNetwork()
+        if self.network_layer:
+            # TODO: Change sources_layer to final locations-within-buffer-layer
+            sources_layer = uf.getLegendLayerByName(self.iface, 'within_fire1_test')
+            source_points = [feature.geometry().centroid().asPoint() for feature in sources_layer.getFeatures()]
+
+            # TODO: change to final fire-layer
+            fire = uf.getLegendLayerByName(self.iface, 'Fire1')
+            fire_point = [feature.geometry().centroid().asPoint() for feature in fire.getFeatures()]
+            source_points.insert(0, fire_point[0])
+
+            # build the graph including these points
+            if len(source_points) > 1:
+                self.graph, self.tied_points = uf.makeUndirectedGraph(self.network_layer, source_points)
+                # the tied points are the new source_points on the graph
+                # if self.graph and self.tied_points:
+                #     text = "network is built for %s points" % len(self.tied_points)
+                    # self.insertReport(text)
+
+        return
+
+    def calculateRoute(self):
+        self.buildNetwork() # instead of a buildNetwork-button
+        # TODO: make this nicer? Retrieving the FID-attribute of the locations.
+        # TODO:  Change input-parameter to final-within-buffer-layer
+        locations_layer = uf.getLegendLayerByName(self.iface, 'within_fire1_test')
+        locations_list = [feature.attribute('FID') for feature in locations_layer.getFeatures()]
+
+        # origin and destination must be in the set of tied_points
+        options = len(self.tied_points)
+        if options > 1:
+            # origin and destination are given as an index in the tied_points list
+            origin = 0
+
+            # calculate the shortest path for the given origin and every destination
+            for destination in range(1, len(self.tied_points)):
+                path, cost = uf.calculateRouteDijkstra(self.graph, self.tied_points, origin, destination)
+                # store the route results in temporary layer called "Routes"
+                routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
+                # create one if it doesn't exist
+                if not routes_layer:
+                    attribs = ['to_FID', 'length']
+                    types = [QtCore.QVariant.String]
+                    routes_layer = uf.createTempLayer('Routes','LINESTRING',self.network_layer.crs().postgisSrid(), attribs, types)
+                    uf.loadTempLayer(routes_layer)
+                # insert route line
+                # TODO: The cost is inf, fix that!!
+                uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost[destination]]])
+            buffer = processing.runandload('qgis:fixeddistancebuffer',routes_layer,10.0,5,False,None)
+            #self.refreshCanvas(routes_layer) """
+
+    def deleteRoutes(self): #TODO: implement this function?
+        routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
+        if routes_layer:
+            ids = uf.getAllFeatureIds(routes_layer)
+            routes_layer.startEditing()
+            for id in ids:
+                routes_layer.deleteFeature(id)
+            routes_layer.commitChanges()
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():

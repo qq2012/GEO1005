@@ -604,7 +604,7 @@ def calculateRouteDijkstra(graph, tied_points, origin, destination, impedance=0)
                 points.append(from_point)
                 points.reverse()
 
-    return points
+    return points, cost
 
 
 def calculateServiceArea(graph, tied_points, origin, cutoff, impedance=0):
@@ -716,7 +716,7 @@ def createTempLayer(name, geometry, srid, attributes, types):
         vlayer.startEditing()
         fields = []
         for i, att in enumerate(attributes):
-            fields.append(QgsField(att, types[i]))
+            fields.append(QgsField(att, types[i-1]))
         # add the fields to the layer
         try:
             provider.addAttributes(fields)

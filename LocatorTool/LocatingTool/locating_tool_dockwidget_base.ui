@@ -351,6 +351,19 @@
          <string>Create Cone</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="shortestRouteButton">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>340</y>
+          <width>281</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Shortes route from fire to locations</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
