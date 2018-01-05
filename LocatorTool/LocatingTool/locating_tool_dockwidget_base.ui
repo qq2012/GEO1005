@@ -390,6 +390,31 @@
          <string>Subtract Smoke Cone</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="everythingAtOnceButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>490</y>
+          <width>271</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+          <underline>true</underline>
+         </font>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>ONE BUTTON TO
+RULE THEM ALL</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">

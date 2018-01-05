@@ -70,9 +70,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
         self.markAreasButton.clicked.connect(self.markAreas)
         self.clearMarkedButton.clicked.connect(self.clearMarked)
+
         self.calculateConeButton.clicked.connect(self.calculateCone)
         self.testMessageButton.clicked.connect(self.giveMessage)
-        self.takeBiteFromDonutButton.clicked.connect(self.BiteFromDonut)
+        self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
+        self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
@@ -209,7 +211,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             ok_areas.removeSelection()
 
     def giveMessage(self):
-        self.iface.messageBar().pushMessage("test test:", "{testing}".format(coords[0]), level=0, duration=5)
+        self.iface.messageBar().pushMessage("test test:", "{}".format("testing"), level=0, duration=5)
 
     def calculateCone(self):
         if self.chooseWindDirectionCombo.currentText() != 'no wind':
@@ -318,11 +320,39 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearBuffers(mean_coord_layer)
         self.clearBuffers(cone_width_layer)
 
-    def BiteFromDonut(self):
+    def biteFromDonut(self):
         donut = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
         bite = uf.getLegendLayerByName(self.iface, "rotated")
         if donut and bite:
             processing.runandload('qgis:difference', donut, bite, True, None)
+
+    def defineFocalZone(self):
+        #open layer
+        layer = self.getSelectedLayer()
+
+        #create the buffers needed min and max
+        min_dist = self.getMaxBufferCutoff()
+        max_dist = 7500
+        MinBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, min_dist, 12, False, None)
+        MaxBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, max_dist, 12, False, None)
+
+
+        #create the donut (difference)
+        processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
+
+        testname = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        path = "%s/styles/" % QgsProject.instance().homePath()
+        processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
+
+    def everythingAtOnce(self):
+        self.calculateDonut()
+        self.calculateCone()
+        self.biteFromDonut()
+        self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
+        self.defineFocalZone()
+        self.markAreas()
+        self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
+
 
     #############################
     #   Network and route methods
