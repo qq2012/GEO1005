@@ -75,6 +75,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.testMessageButton.clicked.connect(self.giveMessage)
         self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
+        self.completeClearButton.clicked.connect(self.clearAll)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
@@ -167,9 +168,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             return 0
 
-    def calculateDonut(self):
-        #open layer
-        layer = self.getSelectedLayer()
+    def calculateDonut(self, layer=0):
+        #open layer if necessary
+        if not layer:
+            layer = self.getSelectedLayer()
 
         #create the buffers needed min and max
         max_dist = self.getMaxBufferCutoff()
@@ -192,14 +194,20 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #Add possibility of loading def with pre-set layer
         if not layer:
             layer = self.getSelectedLayer()
-
-        intersect_layer = uf.getLegendLayerByName(self.iface, "Difference")
+        if uf.getLegendLayerByName(self.iface, "Difference"):
+            intersect_layer = uf.getLegendLayerByName(self.iface, "Difference")
+        elif uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
+            intersect_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
 
         if layer and intersect_layer:
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
     def markAreas(self):
-        result_area = uf.getLegendLayerByName(self.iface, "Difference")
+        if uf.getLegendLayerByName(self.iface, "Difference"):
+            result_area = uf.getLegendLayerByName(self.iface, "Difference")
+        elif uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
+            result_area = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+
         ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas")
         #Check possibility of this function
         if result_area and ok_areas:
@@ -213,9 +221,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def giveMessage(self):
         self.iface.messageBar().pushMessage("test test:", "{}".format("testing"), level=0, duration=5)
 
-    def calculateCone(self):
+    def calculateCone(self, firelayer=0):
         if self.chooseWindDirectionCombo.currentText() != 'no wind':
-            firelayer = self.getSelectedLayer()
+            if not firelayer:
+                firelayer = self.getSelectedLayer()
 
             processing.runandload('qgis:meancoordinates', firelayer, None, None, None)
             attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -326,9 +335,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if donut and bite:
             processing.runandload('qgis:difference', donut, bite, True, None)
 
-    def defineFocalZone(self):
+    def defineFocalZone(self, layer=0):
         #open layer
-        layer = self.getSelectedLayer()
+        if not layer:
+            layer = self.getSelectedLayer()
 
         #create the buffers needed min and max
         min_dist = self.getMaxBufferCutoff()
@@ -345,13 +355,29 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
 
     def everythingAtOnce(self):
-        self.calculateDonut()
-        self.calculateCone()
+        firelayer = self.getSelectedLayer()
+        self.calculateDonut(firelayer)
+        self.calculateCone(firelayer)
         self.biteFromDonut()
-        self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
-        self.defineFocalZone()
         self.markAreas()
-        self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
+        if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
+        if uf.getLegendLayerByName(self.iface, "Difference"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
+        self.defineFocalZone(firelayer)
+
+    def clearAll(self):
+        if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
+        if uf.getLegendLayerByName(self.iface, "Difference"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
+        if uf.getLegendLayerByName(self.iface, "rotated"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "rotated"))
+        if uf.getLegendLayerByName(self.iface, "Selection"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Selection"))
+        if uf.getLegendLayerByName(self.iface, "Intersection"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
+
 
 
     #############################
