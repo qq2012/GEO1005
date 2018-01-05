@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>486</height>
+    <height>655</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -330,7 +330,7 @@
          <rect>
           <x>150</x>
           <y>270</y>
-          <width>136</width>
+          <width>131</width>
           <height>32</height>
          </rect>
         </property>
@@ -354,14 +354,27 @@
        <widget class="QPushButton" name="shortestRouteButton">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>340</y>
-          <width>281</width>
+          <x>10</x>
+          <y>350</y>
+          <width>271</width>
           <height>32</height>
          </rect>
         </property>
         <property name="text">
-         <string>Shortes route from fire to locations</string>
+         <string>Shortest route from fire to locations</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="testMessageButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>450</y>
+          <width>271</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Give test message</string>
         </property>
        </widget>
       </widget>

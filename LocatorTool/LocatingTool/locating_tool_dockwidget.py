@@ -71,6 +71,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.markAreasButton.clicked.connect(self.markAreas)
         self.clearMarkedButton.clicked.connect(self.clearMarked)
         self.calculateConeButton.clicked.connect(self.calculateCone)
+        self.testMessageButton.clicked.connect(self.giveMessage)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
@@ -206,11 +207,27 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             processing.runalg('qgis:setstyleforvectorlayer', testname, "%sok_areas_style.qml" % path)
             ok_areas.removeSelection()
 
+    def giveMessage(self):
+        self.iface.messageBar().pushMessage("x:", "{}".format(coords[0]), level=0, duration=5)
+
     def calculateCone(self):
-        #self.iface.messageBar().pushMessage("Check", "{}".format("check"), level=0, duration=5)
-        if self.chooseWindDirectionCombo.currentText() == 'no wind':
+        if self.chooseWindDirectionCombo.currentText() != 'no wind':
+            firelayer = uf.getLegendLayerByName(self.iface, "Fire1")
+
+            processing.runandload('qgis:meancoordinates', firelayer, None, None, None)
+            attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
+
+            coords = []
+            for feature in attlayer.getFeatures():
+                attrs = feature.attributes()
+                coords.append(float(attrs[0]))
+                coords.append(float(attrs[1]))
+            maxdist = float(self.maxDistLineEdit.text())
+            coordstring = "{}, {}, {}, {}".format(coords[0], coords[0] + 60, coords[1], coords[1] - maxdist)
+
             #Create points in a line
-            processing.runandload('qgis:regularpoints', "93480.305288,93540.305288,434392.208059,436392.208059", 100, 0, False, True, None)
+            #processing.runandload('qgis:regularpoints', "93480.305288,93540.305288,434392.208059,436392.208059", 100, 0, False, True, None)
+            processing.runandload('qgis:regularpoints', coordstring, 100, 0, False, True, None)
 
             #create attribute named width (id * 60)
             layer = uf.getLegendLayerByName(self.iface, "Regular points")
@@ -219,6 +236,85 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             #Create variabledistancebuffer on attribute width
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
+
+
+            if self.chooseWindDirectionCombo.currentText() == 'N':
+                self.rotateCone(180)
+            elif self.chooseWindDirectionCombo.currentText() == 'NE':
+                self.rotateCone(225)
+            elif self.chooseWindDirectionCombo.currentText() == 'E':
+                self.rotateCone(270)
+            elif self.chooseWindDirectionCombo.currentText() == 'SE':
+                self.rotateCone(315)
+            elif self.chooseWindDirectionCombo.currentText() == 'S':
+                self.rotateCone(0)
+            elif self.chooseWindDirectionCombo.currentText() == 'SW':
+                self.rotateCone(45)
+            elif self.chooseWindDirectionCombo.currentText() == 'W':
+                self.rotateCone(90)
+            elif self.chooseWindDirectionCombo.currentText() == 'NW':
+                self.rotateCone(135)
+
+    def rotateCone(self, angle):
+        attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
+
+        coords = []
+        for feature in attlayer.getFeatures():
+            attrs = feature.attributes()
+            coords.append(float(attrs[0]))
+            coords.append(float(attrs[1]))
+
+        # select the active layer
+        #OLD layer = iface.activeLayer()
+        layer = uf.getLegendLayerByName(self.iface, "Buffer")
+        # get feature of the layer
+        feature = layer.getFeatures().next()
+        geom = feature.geometry()
+
+        pt = QgsPoint(coords[0], coords[1])
+
+        geom.rotate(angle, pt)
+
+        # Extract CRS from route
+        CRS = layer.crs().postgisSrid()
+
+        URI = "Polygon?crs=epsg:" + str(CRS) + "&field=id:integer""&index=yes"
+
+        # Create polygon layer for buffer
+        mem_layer = QgsVectorLayer(URI,
+                                   "rotated",
+                                   "memory")
+
+        # add Map Layer to Registry
+        QgsMapLayerRegistry.instance().addMapLayer(mem_layer)
+
+        # Prepare mem_layer for editing
+        mem_layer.startEditing()
+
+        # Set feature for rotated layer
+        feat = QgsFeature()
+
+        # Set geometry for rotated layer
+        feat.setGeometry(geom)
+
+        # set attributes values for rotated layer
+        feat.setAttributes([1])
+
+        mem_layer.addFeature(feat, True)
+
+        # stop editing and save changes
+        mem_layer.commitChanges()
+
+        # remove OG cone and the other shit that's no longer neccessary
+        cone_layer = uf.getLegendLayerByName(self.iface, "Buffer")
+        points = uf.getLegendLayerByName(self.iface, "Regular points")
+        mean_coord_layer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
+        cone_width_layer = uf.getLegendLayerByName(self.iface, "Calculated")
+        self.clearBuffers(cone_layer)
+        self.clearBuffers(points)
+        self.clearBuffers(mean_coord_layer)
+        self.clearBuffers(cone_width_layer)
+
 
     #############################
     #   Network and route methods
