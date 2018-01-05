@@ -72,6 +72,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearMarkedButton.clicked.connect(self.clearMarked)
         self.calculateConeButton.clicked.connect(self.calculateCone)
         self.testMessageButton.clicked.connect(self.giveMessage)
+        self.takeBiteFromDonutButton.clicked.connect(self.BiteFromDonut)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
@@ -175,7 +176,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         MinBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, min_dist, 12, False, None)
 
         #create the donut (difference)
-        donut = processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
+        processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
         #self.refreshCanvas(donut)
 
@@ -190,13 +191,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if not layer:
             layer = self.getSelectedLayer()
 
-        intersect_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        intersect_layer = uf.getLegendLayerByName(self.iface, "Difference")
 
         if layer and intersect_layer:
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
     def markAreas(self):
-        result_area = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        result_area = uf.getLegendLayerByName(self.iface, "Difference")
         ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas")
         #Check possibility of this function
         if result_area and ok_areas:
@@ -208,11 +209,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             ok_areas.removeSelection()
 
     def giveMessage(self):
-        self.iface.messageBar().pushMessage("x:", "{}".format(coords[0]), level=0, duration=5)
+        self.iface.messageBar().pushMessage("test test:", "{testing}".format(coords[0]), level=0, duration=5)
 
     def calculateCone(self):
         if self.chooseWindDirectionCombo.currentText() != 'no wind':
-            firelayer = uf.getLegendLayerByName(self.iface, "Fire1")
+            firelayer = self.getSelectedLayer()
 
             processing.runandload('qgis:meancoordinates', firelayer, None, None, None)
             attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -226,7 +227,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             coordstring = "{}, {}, {}, {}".format(coords[0], coords[0] + 60, coords[1], coords[1] - maxdist)
 
             #Create points in a line
-            #processing.runandload('qgis:regularpoints', "93480.305288,93540.305288,434392.208059,436392.208059", 100, 0, False, True, None)
             processing.runandload('qgis:regularpoints', coordstring, 100, 0, False, True, None)
 
             #create attribute named width (id * 60)
@@ -236,7 +236,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             #Create variabledistancebuffer on attribute width
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
-
 
             if self.chooseWindDirectionCombo.currentText() == 'N':
                 self.rotateCone(180)
@@ -305,7 +304,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # stop editing and save changes
         mem_layer.commitChanges()
 
-        # remove OG cone and the other shit that's no longer neccessary
+        cone = uf.getLegendLayerByName(self.iface, "rotated")
+        path = "%s/styles/" % QgsProject.instance().homePath()
+        processing.runalg('qgis:setstyleforvectorlayer', cone, "%ssmoke_style.qml" % path)
+
+        # remove OG cone and the other shit that's no longer necessary
         cone_layer = uf.getLegendLayerByName(self.iface, "Buffer")
         points = uf.getLegendLayerByName(self.iface, "Regular points")
         mean_coord_layer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -315,6 +318,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearBuffers(mean_coord_layer)
         self.clearBuffers(cone_width_layer)
 
+    def BiteFromDonut(self):
+        donut = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        bite = uf.getLegendLayerByName(self.iface, "rotated")
+        if donut and bite:
+            processing.runandload('qgis:difference', donut, bite, True, None)
 
     #############################
     #   Network and route methods

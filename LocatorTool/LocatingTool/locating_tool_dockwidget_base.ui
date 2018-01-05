@@ -316,7 +316,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>270</y>
+          <y>310</y>
           <width>136</width>
           <height>32</height>
          </rect>
@@ -329,7 +329,7 @@
         <property name="geometry">
          <rect>
           <x>150</x>
-          <y>270</y>
+          <y>310</y>
           <width>131</width>
           <height>32</height>
          </rect>
@@ -342,7 +342,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>310</y>
+          <y>270</y>
           <width>136</width>
           <height>32</height>
          </rect>
@@ -375,6 +375,19 @@
         </property>
         <property name="text">
          <string>Give test message</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="takeBiteFromDonutButton">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>270</y>
+          <width>131</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Subtract Smoke Cone</string>
         </property>
        </widget>
       </widget>
