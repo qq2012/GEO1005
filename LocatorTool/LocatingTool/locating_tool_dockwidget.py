@@ -150,7 +150,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def setSelectedAttribute(self):
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
-        layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
+        layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
         fields = uf.getFieldNames(layer)
         self.extractAttributeSummary(fields)
 
@@ -202,20 +202,26 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if layer and intersect_layer:
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
+    def filterSelectionLayer(self, selection_layer):
+        # TODO: implement this function to filter out the 10 best locations based on size, traveltime etc...
+
+        return selection_layer
+
     def markAreas(self):
         if uf.getLegendLayerByName(self.iface, "Difference"):
             result_area = uf.getLegendLayerByName(self.iface, "Difference")
         elif uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
             result_area = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
 
-        ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas")
+        ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas_final")
         #Check possibility of this function
         if result_area and ok_areas:
             self.selectFeaturesBuffer(ok_areas)
             processing.runandload('qgis:saveselectedfeatures', ok_areas, None)
-            testname = uf.getLegendLayerByName(self.iface, "Selection")
+            selection_layer = uf.getLegendLayerByName(self.iface, "Selection")
+            filtered_selection = self.filterSelectionLayer(selection_layer)
             path = "%s/styles/" % QgsProject.instance().homePath()
-            processing.runalg('qgis:setstyleforvectorlayer', testname, "%sok_areas_style.qml" % path)
+            processing.runalg('qgis:setstyleforvectorlayer', filtered_selection, "%sok_areas_style.qml" % path)
             ok_areas.removeSelection()
 
     def giveMessage(self):
@@ -365,6 +371,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if uf.getLegendLayerByName(self.iface, "Difference"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
         self.defineFocalZone(firelayer)
+        self.calculateRoute()
 
     def clearAll(self):
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
@@ -377,7 +384,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Selection"))
         if uf.getLegendLayerByName(self.iface, "Intersection"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
-
+        if uf.getLegendLayerByName(self.iface, "Routes"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Routes"))
 
 
     #############################
@@ -406,11 +414,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.network_layer = self.getNetwork()
         if self.network_layer:
             # TODO: Change sources_layer to final locations-within-buffer-layer
-            sources_layer = uf.getLegendLayerByName(self.iface, 'within_fire1_test')
+            sources_layer = uf.getLegendLayerByName(self.iface, 'Selection')
             source_points = [feature.geometry().centroid().asPoint() for feature in sources_layer.getFeatures()]
 
             # TODO: change to final fire-layer
-            fire = uf.getLegendLayerByName(self.iface, 'Fire1')
+            fire = uf.getLegendLayerByName(self.iface, 'Fire2')
             fire_point = [feature.geometry().centroid().asPoint() for feature in fire.getFeatures()]
             source_points.insert(0, fire_point[0])
 
@@ -423,7 +431,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.buildNetwork() # instead of a buildNetwork-button
         # TODO: make this nicer? Retrieving the FID-attribute of the locations.
         # TODO:  Change input-parameter to final-within-buffer-layer
-        locations_layer = uf.getLegendLayerByName(self.iface, 'within_fire1_test')
+        locations_layer = uf.getLegendLayerByName(self.iface, 'Selection')
         locations_list = [feature.attribute('FID') for feature in locations_layer.getFeatures()]
 
         # origin and destination must be in the set of tied_points
@@ -446,8 +454,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 # insert route line
                 # TODO: The cost is inf, fix that!!
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost[destination]]])
-            buffer = processing.runandload('qgis:fixeddistancebuffer',routes_layer,10.0,5,False,None)
+            # buffer = processing.runandload('qgis:fixeddistancebuffer',routes_layer,10.0,5,False,None)
             #self.refreshCanvas(routes_layer)
+
+            style_path = "%s/styles/" % QgsProject.instance().homePath()
+            processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
 
     def deleteRoutes(self): #TODO: implement this function?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
@@ -474,7 +485,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         """   ROB: Can also be done differently, but if it works it works.. Right? """
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
 
-        layer = uf.getLegendLayerByName(self.iface, 'ok_areas')
+        layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
         summary = []
         # only use the first attribute in the list
         for feature in layer.getFeatures():
