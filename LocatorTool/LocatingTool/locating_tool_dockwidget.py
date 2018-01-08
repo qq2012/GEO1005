@@ -100,9 +100,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer_names = uf.getLayersListNames(layers)
             self.selectLayerCombo.addItems(layer_names)
             self.setSelectedLayer()
-        else:
-            self.selectAttributeCombo.clear()
-            self.clearChart()
+
 
     def updateDistances(self):
         severity = self.selectFireSeverityCombo.currentText()
