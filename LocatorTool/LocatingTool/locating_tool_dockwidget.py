@@ -104,19 +104,19 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def updateDistances(self):
         severity = self.selectFireSeverityCombo.currentText()
-        if severity == 'GRIP 1':
+        if severity == 'CAT 1':
             self.minDistLineEdit.setText(str(100))
             self.maxDistLineEdit.setText(str(750))
-        elif severity == 'GRIP 2':
+        elif severity == 'CAT 2':
             self.minDistLineEdit.setText(str(250))
             self.maxDistLineEdit.setText(str(1000))
-        elif severity == 'GRIP 3':
+        elif severity == 'CAT 3':
             self.minDistLineEdit.setText(str(400))
             self.maxDistLineEdit.setText(str(1250))
-        elif severity == 'GRIP 4':
+        elif severity == 'CAT 4':
             self.minDistLineEdit.setText(str(500))
             self.maxDistLineEdit.setText(str(1250))
-        elif severity == 'GRIP 5':
+        elif severity == 'CAT 5':
             self.minDistLineEdit.setText(str(500))
             self.maxDistLineEdit.setText(str(1500))
 
@@ -253,21 +253,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
 
             if self.chooseWindDirectionCombo.currentText() == 'N':
-                self.rotateCone(180)
-            elif self.chooseWindDirectionCombo.currentText() == 'NE':
-                self.rotateCone(225)
-            elif self.chooseWindDirectionCombo.currentText() == 'E':
-                self.rotateCone(270)
-            elif self.chooseWindDirectionCombo.currentText() == 'SE':
-                self.rotateCone(315)
-            elif self.chooseWindDirectionCombo.currentText() == 'S':
                 self.rotateCone(0)
-            elif self.chooseWindDirectionCombo.currentText() == 'SW':
+            elif self.chooseWindDirectionCombo.currentText() == 'NE':
                 self.rotateCone(45)
-            elif self.chooseWindDirectionCombo.currentText() == 'W':
+            elif self.chooseWindDirectionCombo.currentText() == 'E':
                 self.rotateCone(90)
-            elif self.chooseWindDirectionCombo.currentText() == 'NW':
+            elif self.chooseWindDirectionCombo.currentText() == 'SE':
                 self.rotateCone(135)
+            elif self.chooseWindDirectionCombo.currentText() == 'S':
+                self.rotateCone(180)
+            elif self.chooseWindDirectionCombo.currentText() == 'SW':
+                self.rotateCone(225)
+            elif self.chooseWindDirectionCombo.currentText() == 'W':
+                self.rotateCone(270)
+            elif self.chooseWindDirectionCombo.currentText() == 'NW':
+                self.rotateCone(315)
 
     def rotateCone(self, angle):
         attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -296,7 +296,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # Create polygon layer for buffer
         mem_layer = QgsVectorLayer(URI,
-                                   "rotated",
+                                   "Smoke cone",
                                    "memory")
 
         # add Map Layer to Registry
@@ -305,13 +305,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # Prepare mem_layer for editing
         mem_layer.startEditing()
 
-        # Set feature for rotated layer
+        # Set feature for Smoke cone layer
         feat = QgsFeature()
 
-        # Set geometry for rotated layer
+        # Set geometry for Smoke cone layer
         feat.setGeometry(geom)
 
-        # set attributes values for rotated layer
+        # set attributes values for Smoke cone layer
         feat.setAttributes([1])
 
         mem_layer.addFeature(feat, True)
@@ -319,7 +319,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # stop editing and save changes
         mem_layer.commitChanges()
 
-        cone = uf.getLegendLayerByName(self.iface, "rotated")
+        cone = uf.getLegendLayerByName(self.iface, "Smoke cone")
         path = "%s/styles/" % QgsProject.instance().homePath()
         processing.runalg('qgis:setstyleforvectorlayer', cone, "%ssmoke_style.qml" % path)
 
@@ -335,7 +335,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def biteFromDonut(self):
         donut = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
-        bite = uf.getLegendLayerByName(self.iface, "rotated")
+        bite = uf.getLegendLayerByName(self.iface, "Smoke cone")
         if donut and bite:
             processing.runandload('qgis:difference', donut, bite, True, None)
 
@@ -376,8 +376,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
         if uf.getLegendLayerByName(self.iface, "Difference"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
-        if uf.getLegendLayerByName(self.iface, "rotated"):
-            self.clearBuffers(uf.getLegendLayerByName(self.iface, "rotated"))
+        if uf.getLegendLayerByName(self.iface, "Smoke cone"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Smoke cone"))
         if uf.getLegendLayerByName(self.iface, "Selection"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Selection"))
         if uf.getLegendLayerByName(self.iface, "Intersection"):
