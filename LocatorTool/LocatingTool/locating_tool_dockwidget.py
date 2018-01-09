@@ -63,7 +63,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
-        self.openFireButton.clicked.connect(self.openFire)
+        self.openFireButton.clicked.connect(self.warningLoadData)
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
@@ -90,11 +90,26 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.fire_layer = self.setFireLayer()
 
 
+    def warningLoadData(self):
+        msgBox = QtGui.QMessageBox()
+        msgBox.setText("All current layers will be droped, continue?")
+        msgBox.setStandardButtons(QtGui.QMessageBox.Yes)
+        msgBox.addButton(QtGui.QMessageBox.No)
+        msgBox.setDefaultButton(QtGui.QMessageBox.No)
+        if msgBox.exec_() == QtGui.QMessageBox.Yes:
+            self.openFire()
+
+
     def openFire(self,filename=""):
-        last_dir = uf.getLastDir("data_MCC")
-        new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-        if new_file:
-            self.iface.addProject(unicode(new_file))
+        #last_dir = uf.getLastDir("data_MCC")
+        #new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
+        #if new_file:
+        #    self.iface.addProject(unicode(new_file))
+        try:
+            data_path = os.path.join(os.path.dirname(__file__), 'sample_data', 'Fire2_scenario.qgs')
+        except:
+            self.errorOccurs()
+        self.iface.addProject(data_path)
 
     def setFireLayer(self):
         uf.showMessage(self.iface, 'plugin dir: {}'.format(self.plugin_dir), dur=10)
