@@ -202,7 +202,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def filterSelectionLayer(self, selection_layer):
         # This method filters out the 10 best locations based on size, traveltime etc... TODO: actually filter based on the join
-        routes_layer = uf. getLegendLayerByName(self.iface, 'Saved routes')
+        routes_layer = uf. getLegendLayerByName(self.iface, 'Routes')
 
         if routes_layer:
             filtered_layer = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
@@ -450,7 +450,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
             # calculate the shortest path for the given origin and every destination
             for destination in range(1, len(self.tied_points)):
-                path, cost = uf.calculateRouteDijkstra(self.graph, self.tied_points, origin, destination)
+                (path, cost) = uf.calculateRouteDijkstra(self.graph, self.tied_points, origin, destination)
                 # store the route results in temporary layer called "Routes"
                 routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
                 # create one if it doesn't exist
@@ -461,14 +461,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                     uf.loadTempLayer(routes_layer)
                 # insert route line
                 # TODO: The cost is inf, fix that!!
-                uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost[destination]]])
-            saved_routes_lyr = uf.copyLayerToShapeFile(routes_layer, '/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC','Saved routes')
-            QgsMapLayerRegistry.instance().addMapLayer(saved_routes_lyr)
-
-
-
+                cost = QgsDistanceArea().measureLine(path) #Calculates the length of the path
+                uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost]])
+                
             style_path = "%s/styles/" % QgsProject.instance().homePath()
-            processing.runalg('qgis:setstyleforvectorlayer', saved_routes_lyr, "%sShortestRoute_style.qml" % style_path)
+            processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
 
     def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
