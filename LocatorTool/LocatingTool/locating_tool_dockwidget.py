@@ -201,9 +201,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
     def filterSelectionLayer(self, selection_layer):
-        # TODO: implement this function to filter out the 10 best locations based on size, traveltime etc...
+        # This method filters out the 10 best locations based on size, traveltime etc... TODO: actually filter based on the join
+        routes_layer = uf. getLegendLayerByName(self.iface, 'Saved routes')
 
-        return selection_layer
+        if routes_layer:
+            filtered_layer = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
+        else:
+            filtered_layer = None
+
+        return filtered_layer
 
     def markAreas(self):
         if uf.getLegendLayerByName(self.iface, "Difference"):
@@ -217,10 +223,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.selectFeaturesBuffer(ok_areas)
             processing.runandload('qgis:saveselectedfeatures', ok_areas, None)
             selection_layer = uf.getLegendLayerByName(self.iface, "Selection")
-            filtered_selection = self.filterSelectionLayer(selection_layer)
             path = "%s/styles/" % QgsProject.instance().homePath()
-            processing.runalg('qgis:setstyleforvectorlayer', filtered_selection, "%sok_areas_style.qml" % path)
+            processing.runalg('qgis:setstyleforvectorlayer', selection_layer, "%sok_areas_style.qml" % path)
             ok_areas.removeSelection()
+        return selection_layer
 
     def giveMessage(self):
         self.iface.messageBar().pushMessage("test test:", "{}".format("testing"), level=0, duration=5)
@@ -363,13 +369,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.calculateDonut(firelayer)
         self.calculateCone(firelayer)
         self.biteFromDonut()
-        self.markAreas()
+        selection_lyr = self.markAreas()
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
         if uf.getLegendLayerByName(self.iface, "Difference"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
         self.defineFocalZone(firelayer)
         self.calculateRoute()
+        filtered_lyr = self.filterSelectionLayer(selection_lyr)
+
 
     def clearAll(self):
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
@@ -384,6 +392,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
         if uf.getLegendLayerByName(self.iface, "Routes"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Routes"))
+        if uf.getLegendLayerByName(self.iface, "Saved routes"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Saved routes"))
 
 
     #############################
@@ -430,7 +440,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # TODO: make this nicer? Retrieving the FID-attribute of the locations.
         # TODO:  Change input-parameter to final-within-buffer-layer
         locations_layer = uf.getLegendLayerByName(self.iface, 'Selection')
-        locations_list = [feature.attribute('FID') for feature in locations_layer.getFeatures()]
+        locations_list = [feature.attribute('FID2') for feature in locations_layer.getFeatures()]
 
         # origin and destination must be in the set of tied_points
         options = len(self.tied_points)
@@ -446,19 +456,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 # create one if it doesn't exist
                 if not routes_layer:
                     attribs = ['to_FID', 'length']
-                    types = [QtCore.QVariant.String]
+                    types = [QtCore.QVariant.LongLong]
                     routes_layer = uf.createTempLayer('Routes','LINESTRING',self.network_layer.crs().postgisSrid(), attribs, types)
                     uf.loadTempLayer(routes_layer)
                 # insert route line
                 # TODO: The cost is inf, fix that!!
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost[destination]]])
-            # buffer = processing.runandload('qgis:fixeddistancebuffer',routes_layer,10.0,5,False,None)
-            #self.refreshCanvas(routes_layer)
+            saved_routes_lyr = uf.copyLayerToShapeFile(routes_layer, '/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC','Saved routes')
+            QgsMapLayerRegistry.instance().addMapLayer(saved_routes_lyr)
+
+
 
             style_path = "%s/styles/" % QgsProject.instance().homePath()
-            processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
+            processing.runalg('qgis:setstyleforvectorlayer', saved_routes_lyr, "%sShortestRoute_style.qml" % style_path)
 
-    def deleteRoutes(self): #TODO: implement this function?
+    def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
         if routes_layer:
             ids = uf.getAllFeatureIds(routes_layer)
