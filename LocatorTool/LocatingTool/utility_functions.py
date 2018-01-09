@@ -29,6 +29,7 @@ import psycopg2 as pgsql
 import numpy as np
 import math
 import os.path
+import re
 
 
 #
@@ -96,6 +97,14 @@ def getLegendLayerByName(iface, name):
             layer = i
     return layer
 
+def getLegendLayerByRegExp(iface, exp):
+    layer = None
+    layers = []
+    for lyr in iface.legendInterface().layers():
+        if re.match(exp, lyr.name()):
+            layer = lyr
+            layers.append(lyr.name())
+    return layer, layers
 
 def getCanvasLayerByName(iface, name):
     layer = None
