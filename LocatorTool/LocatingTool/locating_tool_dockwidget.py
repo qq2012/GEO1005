@@ -85,12 +85,20 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # initialisation
         self.updateLayers()
 
+        # Standing attributes - 'global variables'
+        self.plugin_dir = os.path.dirname(__file__)
+        self.fire_layer = self.setFireLayer()
+
 
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
         if new_file:
             self.iface.addProject(unicode(new_file))
+
+    def setFireLayer(self):
+        uf.showMessage(self.iface, 'plugin dir: {}'.format(self.plugin_dir), dur=10)
+        return None
 
 
     def updateLayers(self):
@@ -169,7 +177,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateDonut(self, layer=0):
         #open layer if necessary
         if not layer:
-            layer = self.getSelectedLayer()
+            layer = self.getSelectedLayer() # TODO put fire layer here
 
         #create the buffers needed min and max
         max_dist = self.getMaxBufferCutoff()
@@ -365,7 +373,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
 
     def everythingAtOnce(self):
-        firelayer = self.getSelectedLayer()
+        firelayer = self.getSelectedLayer() # TODO change this to fire-layer
         self.calculateDonut(firelayer)
         self.calculateCone(firelayer)
         self.biteFromDonut()
@@ -463,7 +471,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 # TODO: The cost is inf, fix that!!
                 cost = QgsDistanceArea().measureLine(path) #Calculates the length of the path
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost]])
-                
+
             style_path = "%s/styles/" % QgsProject.instance().homePath()
             processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
 
