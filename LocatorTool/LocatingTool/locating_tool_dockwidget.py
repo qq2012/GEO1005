@@ -65,7 +65,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         self.openFireButton.clicked.connect(self.warningLoadData)
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
-        self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
+        # self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
         self.clearBuffersButton.clicked.connect(self.clearBuffers)
         self.markAreasButton.clicked.connect(self.markAreas)
@@ -103,10 +103,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def openFire(self,filename=""):
         last_dir = uf.getLastDir("data_MCC")
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-        # uf.showMessage(self.iface, 'file name {}'.format(new_file))
 
         if new_file:
            self.iface.addProject(unicode(new_file))
+
+        #TODO fix a drop down menu to select the scenarios from instead of openieng a file-explorer window.
         # try:
         #     data_path = os.path.join(os.path.dirname(__file__), 'sample_data', 'Fire2_scenario.qgs')
         # except:
@@ -117,12 +118,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def setFireLayer(self):
         fire = None
         fire = uf.getLegendLayerByRegExp(self.iface, 'Fire[1234]\Z')
-        # uf.showMessage(self.iface, 'fire regexp: {}'.format(fire.name()))
         if fire:
             self.fire_layer = fire
 
-        self.selectLayerCombo.clear()
-        self.selectLayerCombo.addItems([self.fire_layer.name()])
+        # self.selectLayerCombo.clear()
+        # self.selectLayerCombo.addItems([self.fire_layer.name()])
 
         return fire
 
@@ -174,10 +174,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.setSelectedAttribute() #before: self.updateAttributes(layer)
         pass
 
-    def getSelectedLayer(self):
-        layer_name = self.selectLayerCombo.currentText()
-        layer = uf.getLegendLayerByName(self.iface,layer_name)
-        return layer
+    # def getSelectedLayer(self):
+    #     layer_name = self.selectLayerCombo.currentText()
+    #     layer = uf.getLegendLayerByName(self.iface,layer_name)
+    #     return layer
 
 
     def setSelectedAttribute(self):
@@ -202,9 +202,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def calculateDonut(self, layer=0):
         #open layer if necessary
-        if not layer:
+        # if not layer: #TODO: ROB, I don't know why you needed this if-statement but it worked better (I think) without it /Anna
             # layer = self.getSelectedLayer() # TODO put fire layer here
-            layer = self.fire_layer
+        layer = self.fire_layer
 
         #create the buffers needed min and max
         max_dist = self.getMaxBufferCutoff()
@@ -225,8 +225,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def selectFeaturesBuffer(self, layer=0):
         #Add possibility of loading def with pre-set layer
-        if not layer:
-            layer = self.getSelectedLayer()
+        # if not layer:
+            # layer = self.getSelectedLayer()
         if uf.getLegendLayerByName(self.iface, "Difference"):
             intersect_layer = uf.getLegendLayerByName(self.iface, "Difference")
         elif uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
@@ -239,12 +239,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # This method filters out the 10 best locations based on size, traveltime etc... TODO: actually filter based on the join
         routes_layer = uf. getLegendLayerByName(self.iface, 'Routes')
 
-        if routes_layer:
-            filtered_layer = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
-        else:
+        if not routes_layer:
             filtered_layer = None
+        else:
+            dicti = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
+            # filtered_layer = processing.runandload('qgis:joinattributestable', selection_layer, routes_layer, 'FID2','to_FID', None)
+            # uf.showMessage(self.iface, 'dict keys: {}'.format(dicti['OUTPUT_LAYER'], dur=10))
 
-        return filtered_layer
+            join = dicti['OUTPUT_LAYER']
+            join_layer = QgsVectorLayer(join, "join_layer", "ogr")
+            # the last load the layer
+            QgsMapLayerRegistry.instance().addMapLayers([join_layer])
+
+            uf.selectFeaturesByExpression(join_layer,'id>1000') #TODO why is there 2 functions selectfeaturebyexpression?
+
+        # return filtered_layer
 
     def markAreas(self):
         if uf.getLegendLayerByName(self.iface, "Difference"):
@@ -383,8 +392,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def defineFocalZone(self, layer=0):
         #open layer
-        if not layer:
-            layer = self.getSelectedLayer()
+        # if not layer:
+        #     layer = self.getSelectedLayer()
 
         #create the buffers needed min and max
         min_dist = self.getMaxBufferCutoff()
@@ -413,8 +422,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
         self.defineFocalZone(firelayer)
         self.calculateRoute()
-        filtered_lyr = self.filterSelectionLayer(selection_lyr)
-
+        self.filterSelectionLayer(selection_lyr)
 
     def clearAll(self):
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
@@ -429,8 +437,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
         if uf.getLegendLayerByName(self.iface, "Routes"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Routes"))
-        if uf.getLegendLayerByName(self.iface, "Saved routes"):
-            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Saved routes"))
+
 
 
     #############################
@@ -560,6 +567,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.statisticsTable.clear()
 
     def closeEvent(self, event):
+        self.clearAll()
         self.closingPlugin.emit()
         event.accept()
 

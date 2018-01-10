@@ -97,13 +97,6 @@ def getLegendLayerByName(iface, name):
             layer = i
     return layer
 
-def getLegendLayerByPartName(iface, name):
-    layer = None
-    for lyr in iface.legendInterface().layers():
-        if name in lyr.name():
-            layer = lyr
-    return lyr
-
 def getLegendLayerByRegExp(iface, exp):
     layer = None
     layers = []
@@ -362,6 +355,7 @@ def selectFeaturesByExpression(layer, expression):
         layer.select(features)
 
 def selectFeaturesByExpression2(layer, expression):
+    # expression is a tuple: (attribute filed name, expression), e.g ('area', <100)
     features = []
     if layer:
         request = QgsFeatureRequest().setFilterExpression(expression)
