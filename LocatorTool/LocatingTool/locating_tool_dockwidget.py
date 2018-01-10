@@ -104,7 +104,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
     def openFire(self,filename=""):
-        last_dir = self.plugin_dir
+        last_dir = os.path.join(self.plugin_dir, 'sample_data')
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
 
         if new_file:
