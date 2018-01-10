@@ -56,10 +56,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # set up GUI operation signals
         # data
 
-        self.iface.projectRead.connect(self.updateLayers)
-        self.iface.newProjectCreated.connect(self.updateLayers)
-        self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
-        self.iface.legendInterface().itemAdded.connect(self.updateLayers)
+        # self.iface.projectRead.connect(self.updateLayers)
+        # self.iface.newProjectCreated.connect(self.updateLayers)
+        # self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
+        # self.iface.legendInterface().itemAdded.connect(self.updateLayers)
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
@@ -83,11 +83,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.shortestRouteButton.clicked.connect(self.calculateRoute)
 
         # initialisation
-        self.updateLayers()
+        # self.updateLayers()
 
         # Standing attributes - 'global variables'
         self.plugin_dir = os.path.dirname(__file__)
-        self.fire_layer = self.setFireLayer()
+        self.fire_layer = None
 
 
     def warningLoadData(self):
@@ -101,28 +101,40 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
     def openFire(self,filename=""):
-        #last_dir = uf.getLastDir("data_MCC")
-        #new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-        #if new_file:
-        #    self.iface.addProject(unicode(new_file))
-        try:
-            data_path = os.path.join(os.path.dirname(__file__), 'sample_data', 'Fire2_scenario.qgs')
-        except:
-            self.errorOccurs()
-        self.iface.addProject(data_path)
+        last_dir = uf.getLastDir("data_MCC")
+        new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
+        # uf.showMessage(self.iface, 'file name {}'.format(new_file))
+
+        if new_file:
+           self.iface.addProject(unicode(new_file))
+        # try:
+        #     data_path = os.path.join(os.path.dirname(__file__), 'sample_data', 'Fire2_scenario.qgs')
+        # except:
+        #     self.errorOccurs()
+        # self.iface.addProject(data_path)
+        self.fire_layer = self.setFireLayer()
 
     def setFireLayer(self):
-        uf.showMessage(self.iface, 'plugin dir: {}'.format(self.plugin_dir), dur=10)
-        return None
+        fire = self.fire_layer
+        # fire = uf.getLegendLayerByPartName(self.iface, 'Fire')
+        fire = uf.getLegendLayerByName(self.iface, 'Fire2')
+        uf.showMessage(self.iface, 'fire: {}'.format(fire))
+        if fire:
+            self.fire_layer = fire
 
-
-    def updateLayers(self):
-        layers = uf.getLegendLayers(self.iface, 'all', 'all')
         self.selectLayerCombo.clear()
-        if layers:
-            layer_names = uf.getLayersListNames(layers)
-            self.selectLayerCombo.addItems(layer_names)
-            self.setSelectedLayer()
+        self.selectLayerCombo.addItems([self.fire_layer.name()])
+
+        return fire
+
+
+    # def updateLayers(self):
+    #     layers = uf.getLegendLayers(self.iface, 'all', 'all')
+    #     self.selectLayerCombo.clear()
+    #     if layers:
+    #         layer_names = uf.getLayersListNames(layers)
+    #         self.selectLayerCombo.addItems(layer_names)
+    #         self.setSelectedLayer()
 
 
     def updateDistances(self):
@@ -192,7 +204,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateDonut(self, layer=0):
         #open layer if necessary
         if not layer:
-            layer = self.getSelectedLayer() # TODO put fire layer here
+            # layer = self.getSelectedLayer() # TODO put fire layer here
+            layer = self.fire_layer
 
         #create the buffers needed min and max
         max_dist = self.getMaxBufferCutoff()
@@ -257,7 +270,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateCone(self, firelayer=0):
         if self.chooseWindDirectionCombo.currentText() != 'no wind':
             if not firelayer:
-                firelayer = self.getSelectedLayer()
+                # firelayer = self.getSelectedLayer()
+                firelayer = self.fire_layer
 
             processing.runandload('qgis:meancoordinates', firelayer, None, None, None)
             attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -388,7 +402,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
 
     def everythingAtOnce(self):
-        firelayer = self.getSelectedLayer() # TODO change this to fire-layer
+        # firelayer = self.getSelectedLayer() # TODO change this to fire-layer
+        firelayer = self.fire_layer
         self.calculateDonut(firelayer)
         self.calculateCone(firelayer)
         self.biteFromDonut()
@@ -449,7 +464,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             source_points = [feature.geometry().centroid().asPoint() for feature in sources_layer.getFeatures()]
 
             # TODO: change to final fire-layer
-            fire = uf.getLegendLayerByName(self.iface, 'Fire2')
+            # fire = uf.getLegendLayerByName(self.iface, 'Fire2')
+            fire = self.fire_layer
             fire_point = [feature.geometry().centroid().asPoint() for feature in fire.getFeatures()]
             source_points.insert(0, fire_point[0])
 

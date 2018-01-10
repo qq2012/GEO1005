@@ -97,6 +97,13 @@ def getLegendLayerByName(iface, name):
             layer = i
     return layer
 
+def getLegendLayerByPartName(iface, name):
+    layer = None
+    for lyr in iface.legendInterface().layers():
+        if name in lyr.name():
+            layer = lyr
+    return lyr
+
 def getLegendLayerByRegExp(iface, exp):
     layer = None
     layers = []
