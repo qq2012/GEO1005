@@ -115,10 +115,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.fire_layer = self.setFireLayer()
 
     def setFireLayer(self):
-        fire = self.fire_layer
-        # fire = uf.getLegendLayerByPartName(self.iface, 'Fire')
-        fire = uf.getLegendLayerByName(self.iface, 'Fire2')
-        uf.showMessage(self.iface, 'fire: {}'.format(fire))
+        fire = None
+        fire = uf.getLegendLayerByRegExp(self.iface, 'Fire[1234]\Z')
+        # uf.showMessage(self.iface, 'fire regexp: {}'.format(fire.name()))
         if fire:
             self.fire_layer = fire
 
@@ -459,12 +458,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def buildNetwork(self):
         self.network_layer = self.getNetwork()
         if self.network_layer:
-            # TODO: Change sources_layer to final locations-within-buffer-layer
             sources_layer = uf.getLegendLayerByName(self.iface, 'Selection')
             source_points = [feature.geometry().centroid().asPoint() for feature in sources_layer.getFeatures()]
 
-            # TODO: change to final fire-layer
-            # fire = uf.getLegendLayerByName(self.iface, 'Fire2')
             fire = self.fire_layer
             fire_point = [feature.geometry().centroid().asPoint() for feature in fire.getFeatures()]
             source_points.insert(0, fire_point[0])
@@ -477,7 +473,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateRoute(self):
         self.buildNetwork() # instead of a buildNetwork-button
         # TODO: make this nicer? Retrieving the FID-attribute of the locations.
-        # TODO:  Change input-parameter to final-within-buffer-layer
         locations_layer = uf.getLegendLayerByName(self.iface, 'Selection')
         locations_list = [feature.attribute('FID2') for feature in locations_layer.getFeatures()]
 

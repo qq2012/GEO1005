@@ -111,7 +111,7 @@ def getLegendLayerByRegExp(iface, exp):
         if re.match(exp, lyr.name()):
             layer = lyr
             layers.append(lyr.name())
-    return layer, layers
+    return layer
 
 def getCanvasLayerByName(iface, name):
     layer = None

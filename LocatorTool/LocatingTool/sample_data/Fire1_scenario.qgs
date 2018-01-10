@@ -3842,16 +3842,16 @@ def my_form_open(dialog, layer, feature):
     <Digitizing>
       <DefaultSnapToleranceUnit type="int">2</DefaultSnapToleranceUnit>
       <LayerSnappingList type="QStringList">
+        <value>F1_evac120180108165504746</value>
+        <value>F1_evac220180108165504749</value>
+        <value>Fire120180108165504752</value>
+        <value>Fire1_extent20180108165504751</value>
+        <value>FireStation120180108165504754</value>
         <value>buildings_clip20180106105834403</value>
         <value>hospitals20180106105834410</value>
         <value>landuse_clip_final20180106105834411</value>
         <value>ok_areas_final20180106105834412</value>
         <value>roads_clipped20180106105834413</value>
-        <value>F1_evac120180108165504746</value>
-        <value>F1_evac220180108165504749</value>
-        <value>Fire1_extent20180108165504751</value>
-        <value>Fire120180108165504752</value>
-        <value>FireStation120180108165504754</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
         <value>disabled</value>
