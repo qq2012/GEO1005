@@ -26,6 +26,7 @@ import os.path
 
 from PyQt4 import QtGui, QtCore, uic
 from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import QFileInfo
 from qgis.core import *
 import processing
 
@@ -64,6 +65,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
         self.openFireButton.clicked.connect(self.warningLoadData)
+        self.selectFireButton.activated.connect(self.selectFire)
+
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         # self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
@@ -92,7 +95,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def warningLoadData(self):
         msgBox = QtGui.QMessageBox()
-        msgBox.setText("All current layers will be droped, continue?")
+        msgBox.setText("All current layers will be dropped, continue?")
         msgBox.setStandardButtons(QtGui.QMessageBox.Yes)
         msgBox.addButton(QtGui.QMessageBox.No)
         msgBox.setDefaultButton(QtGui.QMessageBox.No)
@@ -101,7 +104,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
     def openFire(self,filename=""):
-        last_dir = uf.getLastDir("data_MCC")
+        last_dir = self.plugin_dir
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
 
         if new_file:
@@ -114,6 +117,22 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #     self.errorOccurs()
         # self.iface.addProject(data_path)
         self.fire_layer = self.setFireLayer()
+
+    def selectFire(self):
+        fire = self.selectFireButton.currentText()
+
+        if fire == 'Fire 1':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire1_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 2':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire2_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 3':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire3_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 4':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire4_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
 
     def setFireLayer(self):
         fire = None
@@ -437,8 +456,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
         if uf.getLegendLayerByName(self.iface, "Routes"):
             self.clearBuffers(uf.getLegendLayerByName(self.iface, "Routes"))
-
-
+        if uf.getLegendLayerByName(self.iface, "join_layer"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "join_layer"))
+        if uf.getLegendLayerByName(self.iface, "Regular points"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Regular points"))
+        if uf.getLegendLayerByName(self.iface, "Mean coordinates"):
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Mean coordinates"))
 
     #############################
     #   Network and route methods

@@ -428,6 +428,36 @@ RULE THEM ALL</string>
          <string>Clear all</string>
         </property>
        </widget>
+       <widget class="QComboBox" name="selectFireButton">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>10</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Fire 1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fire 2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fire 3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fire 4</string>
+         </property>
+        </item>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
