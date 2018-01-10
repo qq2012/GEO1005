@@ -1119,7 +1119,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="angle" v="0"/>
               <prop k="color" v="152,112,56,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="../../../icon/fire_b.svg"/>
+              <prop k="name" v="../icon/fire_b.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -1140,6 +1140,7 @@ def my_form_open(dialog, layer, feature):
       </renderer-v2>
       <labeling type="simple"/>
       <customproperties>
+        <property key="embeddedWidgets/count" value="0"/>
         <property key="labeling" value="pal"/>
         <property key="labeling/addDirectionSymbol" value="false"/>
         <property key="labeling/angleOffset" value="0"/>
@@ -1726,7 +1727,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="angle" v="0"/>
               <prop k="color" v="138,192,76,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="../../../icon/fire-station.svg"/>
+              <prop k="name" v="../icon/fire-station.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -1747,6 +1748,7 @@ def my_form_open(dialog, layer, feature):
       </renderer-v2>
       <labeling type="simple"/>
       <customproperties>
+        <property key="embeddedWidgets/count" value="0"/>
         <property key="labeling" value="pal"/>
         <property key="labeling/addDirectionSymbol" value="false"/>
         <property key="labeling/angleOffset" value="0"/>

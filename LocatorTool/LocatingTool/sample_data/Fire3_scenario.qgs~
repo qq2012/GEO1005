@@ -146,7 +146,7 @@
         <ymax>439601.89040830725571141</ymax>
       </extent>
       <id>F3_evac120180108165754185</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/F3_evac1.shp</datasource>
+      <datasource>./F3_evac1.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -405,7 +405,7 @@
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="length" index="0" name=""/>
         <alias field="time" index="1" name=""/>
@@ -420,10 +420,10 @@
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -457,7 +457,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>437279.82932732289191335</ymax>
       </extent>
       <id>F3_evac220180108165754188</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/F3_evac2.shp</datasource>
+      <datasource>./F3_evac2.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -716,7 +716,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="length" index="0" name=""/>
         <alias field="time" index="1" name=""/>
@@ -731,10 +731,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -768,7 +768,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>437345.00042934506200254</ymax>
       </extent>
       <id>F3_evac320180108165754190</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/F3_evac3.shp</datasource>
+      <datasource>./F3_evac3.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -1027,7 +1027,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="length" index="0" name=""/>
         <alias field="time" index="1" name=""/>
@@ -1042,10 +1042,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -1079,7 +1079,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>437303.53712716937297955</ymax>
       </extent>
       <id>Fire320180108165754193</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/Fire3.shp</datasource>
+      <datasource>./Fire3.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -1119,7 +1119,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="angle" v="0"/>
               <prop k="color" v="152,112,56,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="/Users/Anna/SDSS/repo/GEO1005_2017_group2/icon/fire_b.svg"/>
+              <prop k="name" v="../../../icon/fire_b.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -1335,7 +1335,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="id" index="0" name=""/>
       </aliases>
@@ -1348,10 +1348,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -1385,7 +1385,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>437506.14917757391231135</ymax>
       </extent>
       <id>Fire3_extent20180108165754191</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/Fire3_extent.shp</datasource>
+      <datasource>./Fire3_extent.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -1636,7 +1636,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="id" index="0" name=""/>
       </aliases>
@@ -1649,10 +1649,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -1686,7 +1686,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>437575.0910914771957323</ymax>
       </extent>
       <id>FireStation320180108165754237</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/FireStation3.shp</datasource>
+      <datasource>./FireStation3.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -1726,7 +1726,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="angle" v="0"/>
               <prop k="color" v="138,192,76,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
-              <prop k="name" v="/Users/Anna/SDSS/repo/GEO1005_2017_group2/icon/fire-station.svg"/>
+              <prop k="name" v="../../../icon/fire-station.svg"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="offset_unit" v="MM"/>
@@ -1942,7 +1942,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="id" index="0" name=""/>
       </aliases>
@@ -1955,10 +1955,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -1992,7 +1992,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>439818.23999999999068677</ymax>
       </extent>
       <id>buildings_clip20180106105834403</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/buildings_clip.shp</datasource>
+      <datasource>./buildings_clip.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -2316,7 +2316,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="gml_id" index="0" name=""/>
         <alias field="namespace" index="1" name=""/>
@@ -2365,10 +2365,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -2402,7 +2402,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>439711.07465292158303782</ymax>
       </extent>
       <id>hospitals20180106105834410</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/hospitals.shp</datasource>
+      <datasource>./hospitals.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -2673,7 +2673,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="osm_id" index="0" name=""/>
         <alias field="code" index="1" name=""/>
@@ -2692,10 +2692,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -2729,7 +2729,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>439818.23999999999068677</ymax>
       </extent>
       <id>landuse_clip_final20180106105834411</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/landuse_clip_final.shp</datasource>
+      <datasource>./landuse_clip_final.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -3189,7 +3189,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="id" index="0" name=""/>
         <alias field="BG2012" index="1" name=""/>
@@ -3216,10 +3216,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="0" type="field" name="Shape_Area"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -3253,7 +3253,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>439818.23999999999068677</ymax>
       </extent>
       <id>ok_areas_final20180106105834412</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/ok_areas_final.shp</datasource>
+      <datasource>./ok_areas_final.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -3279,7 +3279,7 @@ def my_form_open(dialog, layer, feature):
         <default field="eng_desc" expression=""/>
         <default field="ratio" expression=""/>
         <default field="Area" expression=""/>
-        <default field="FID" expression=""/>
+        <default field="FID2" expression=""/>
       </defaults>
       <map-layer-style-manager current="">
         <map-layer-style name=""/>
@@ -3294,7 +3294,7 @@ def my_form_open(dialog, layer, feature):
         <edittype widgetv2type="TextEdit" name="Area">
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
-        <edittype widgetv2type="TextEdit" name="FID">
+        <edittype widgetv2type="TextEdit" name="FID2">
           <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
         </edittype>
       </edittypes>
@@ -3517,12 +3517,12 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="eng_desc" index="0" name=""/>
         <alias field="ratio" index="1" name=""/>
         <alias field="Area" index="2" name=""/>
-        <alias field="FID" index="3" name=""/>
+        <alias field="FID2" index="3" name=""/>
       </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -3536,10 +3536,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -3573,7 +3573,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>439818.23999999999068677</ymax>
       </extent>
       <id>roads_clipped20180106105834413</id>
-      <datasource>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC/roads_clipped.shp</datasource>
+      <datasource>./roads_clipped.shp</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -4005,7 +4005,7 @@ def my_form_open(dialog, layer, feature):
         </symbol>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</annotationform>
+      <annotationform>../../../data_MCC</annotationform>
       <aliases>
         <alias field="sid" index="0" name=""/>
         <alias field="wvk_id" index="1" name=""/>
@@ -4106,10 +4106,10 @@ def my_form_open(dialog, layer, feature):
           <column width="-1" hidden="1" type="actions"/>
         </columns>
       </attributetableconfig>
-      <editform>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editform>
+      <editform>../../../data_MCC</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath>/Users/Anna/SDSS/repo/GEO1005_2017_group2/data_MCC</editforminitfilepath>
+      <editforminitfilepath>../../../data_MCC</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
