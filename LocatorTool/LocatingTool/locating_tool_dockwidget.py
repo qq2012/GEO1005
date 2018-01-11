@@ -134,7 +134,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearLegend()
         project = QgsProject.instance().read(QFileInfo(path))
         self.setFireLayer()
-
+        self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
 
     def setFireLayer(self):
         fire = None
@@ -146,8 +146,14 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.selectLayerCombo.addItems([self.fire_layer.name()])
         else:
             uf.showMessage(self.iface, 'OBS: self.fire_layer = None', lev=2,dur=3)
+        self.setStylesLayers()
         return fire
 
+    def setStylesLayers(self):
+        path = "%s/styles/" % QgsProject.instance().homePath()
+
+        for layer in QgsMapLayerRegistry.instance().mapLayers().values():
+            processing.runalg('qgis:setstyleforvectorlayer', layer.name(), "{}{}{}".format(path, layer.name(), "_style.qml"))
 
     # def updateLayers(self):
     #     layers = uf.getLegendLayers(self.iface, 'all', 'all')
