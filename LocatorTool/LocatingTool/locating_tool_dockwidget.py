@@ -268,8 +268,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             dicti = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
 
-            join = dicti['OUTPUT_LAYER']
-            join_layer = QgsVectorLayer(join, "join_layer", "ogr")
+            join_path = dicti[dicti.keys()[0]] #this is the folder path to the layer
+            join_layer = QgsVectorLayer(join_path, "join_layer", "ogr")
             QgsMapLayerRegistry.instance().addMapLayers([join_layer])
 
             idx = join_layer.fieldNameIndex('Area')
@@ -277,7 +277,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             required_area = int(self.areaEdit.text())
             uf.selectFeaturesByRangeValues(join_layer,'Area',required_area,max_area)
 
-        # return filtered_layer
+            area_dict = processing.runalg('qgis:saveselectedfeatures', join_layer, None)
+
+            area_layer = QgsVectorLayer(area_dict[area_dict.keys()[0]], 'selected_area', 'ogr')
+            QgsMapLayerRegistry.instance().addMapLayers([area_layer])
+
+            sorted_features = uf.sortByField(area_layer, 'length')
+            self.selectTopLocations(area_layer, sorted_features)
+
+    def selectTopLocations(self, locations_layer, sorted_features, top_nr=5):
+        top = sorted_features[0:5]  # TODO add input to decide how many locations we wanna show?
+        top_fid = []
+        for feature in top:
+            top_fid.append(feature[3])
+
+        uf.selectFeaturesByListValues(locations_layer, 'FID2', top_fid)
 
     def markAreas(self):
         if uf.getLegendLayerByName(self.iface, "Difference"):
@@ -438,7 +452,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def clearAllAnalysisLayers(self):
 
         layers = ["Symmetrical difference", "Difference", "Smoke cone", "Selection", "Intersection", "Routes",
-                  "join_layer", "Regular points", "Mean coordinates"]
+                  "join_layer", "Regular points", "Mean coordinates", "selected_area"]
         for layer_name in layers:
             layer = uf.getLegendLayerByName(self.iface, layer_name)
             if layer:
@@ -455,7 +469,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def getNetwork(self):
         # TODO: change roads_clipped to the final road-layer (?)
-        roads_layer = uf.getLegendLayerByName(self.iface, 'roads_clipped')
+        roads_layer = uf.getLegendLayerByName(self.iface, 'Roads')
         if roads_layer:
             # see if there is an obstacles layer to subtract roads from the network TODO: Do we want obstacles??
             obstacles_layer = uf.getLegendLayerByName(self.iface, "Obstacles")
@@ -468,8 +482,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             else:
                 road_network = roads_layer
             return road_network
-        else:
-            return
+
 
     def buildNetwork(self):
         self.network_layer = self.getNetwork()
@@ -516,6 +529,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
             style_path = "%s/styles/" % QgsProject.instance().homePath()
             processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
+        uf.showMessage(self.iface, 'did routes', dur=5)
 
     def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")

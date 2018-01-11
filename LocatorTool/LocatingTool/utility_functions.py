@@ -23,6 +23,7 @@
 from PyQt4 import QtGui, QtCore
 from qgis.core import *
 from qgis.networkanalysis import *
+from operator import itemgetter
 
 from pyspatialite import dbapi2 as sqlite
 import psycopg2 as pgsql
@@ -280,6 +281,17 @@ def updateField(layer, name, expression):
             res = True
     return res
 
+def sortByField(layer, name, desc=False):
+    features = layer.getFeatures()
+    idx = getFieldIndex(layer, name)
+    featList = []
+
+    for feat in features:
+        featList.append(feat.attributes())
+
+    featList.sort(key=itemgetter(idx),reverse=desc)
+
+    return featList
 
 #
 # Feature functions
