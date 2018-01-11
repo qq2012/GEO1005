@@ -66,6 +66,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.calculateConeButton.clicked.connect(self.calculateCone)
         # self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
         # self.shortestRouteButton.clicked.connect(self.calculateRoute)
+        # self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
 
         self.openFireButton.clicked.connect(self.warningLoadData)
         self.selectFireButton.activated.connect(self.selectFire)
@@ -78,7 +79,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
 
         # results tab
-        self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
         self.tied_points = []
 
         # Standing attributes - 'global variables'
@@ -168,12 +168,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if marked_layer:
             self.removeLegendLayer(marked_layer)
 
-    def setSelectedAttribute(self):
-        # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
-        layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
-        fields = uf.getFieldNames(layer)
-        self.extractAttributeSummary(fields)
-
     def getMinBufferCutoff(self):
         cutoff = self.minDistLineEdit.text()
         if uf.isNumeric(cutoff):
@@ -216,7 +210,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
 
     def filterSelectionLayer(self, selection_layer):
-        # This method filters out the 10 best locations based on size, traveltime etc... TODO: actually filter based on the join
         routes_layer = uf. getLegendLayerByName(self.iface, 'Routes')
 
         if not routes_layer:
@@ -429,10 +422,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     #############################
 
     def getNetwork(self):
-        # TODO: change roads_clipped to the final road-layer (?)
         roads_layer = uf.getLegendLayerByName(self.iface, 'Roads')
         if roads_layer:
-            # see if there is an obstacles layer to subtract roads from the network TODO: Do we want obstacles??
+            # see if there is an obstacles layer to subtract roads from the network
             obstacles_layer = uf.getLegendLayerByName(self.iface, "Obstacles")
             if obstacles_layer:
                 # retrieve roads outside obstacles (inside = False)
@@ -462,7 +454,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def calculateRoute(self):
         self.buildNetwork() # instead of a buildNetwork-button
-        # TODO: make this nicer? Retrieving the FID-attribute of the locations.
         locations_layer = uf.getLegendLayerByName(self.iface, 'Selection')
         locations_list = [feature.attribute('FID2') for feature in locations_layer.getFeatures()]
 
@@ -484,21 +475,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                     routes_layer = uf.createTempLayer('Routes','LINESTRING',self.network_layer.crs().postgisSrid(), attribs, types)
                     uf.loadTempLayer(routes_layer)
                 # insert route line
-                # TODO: The cost is inf, fix that!!
                 cost = QgsDistanceArea().measureLine(path) #Calculates the length of the path
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost]])
 
             style_path = "%s/styles/" % QgsProject.instance().homePath()
             processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
-
-    def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
-        routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
-        if routes_layer:
-            ids = uf.getAllFeatureIds(routes_layer)
-            routes_layer.startEditing()
-            for id in ids:
-                routes_layer.deleteFeature(id)
-            routes_layer.commitChanges()
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
@@ -512,11 +493,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def extractAttributeSummary(self, layer):
         # get summary of the attribute
-        # TODO: should layer (variable) be retrieved by name always?
-        """   ROB: Can also be done differently, but if it works it works.. Right? """
-        # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
-
-        # layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
         fields = uf.getFieldNames(layer)
         attribute = [fields[0], fields[2], fields[5]]  # desc, area, length
         summary = []
