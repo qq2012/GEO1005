@@ -55,38 +55,31 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas = self.iface.mapCanvas()
 
         # set up GUI operation signals
+
         # data
 
-        # self.iface.projectRead.connect(self.updateLayers)
-        # self.iface.newProjectCreated.connect(self.updateLayers)
-        # self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
-        # self.iface.legendInterface().itemAdded.connect(self.updateLayers)
-        self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
-        self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
+        # elf.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
+        # self.minMaxBufferButton.clicked.connect(self.calculateDonut)
+        # self.clearBuffersButton.clicked.connect(self.removeLegendLayer)
+        # self.markAreasButton.clicked.connect(self.markAreas)
+        # self.clearMarkedButton.clicked.connect(self.clearMarked)
+        # self.calculateConeButton.clicked.connect(self.calculateCone)
+        # self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
+        # self.shortestRouteButton.clicked.connect(self.calculateRoute)
 
         self.openFireButton.clicked.connect(self.warningLoadData)
         self.selectFireButton.activated.connect(self.selectFire)
 
-        self.minMaxBufferButton.clicked.connect(self.calculateDonut)
-        # self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
+        self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
-        self.clearBuffersButton.clicked.connect(self.removeLegendLayer)
-        self.markAreasButton.clicked.connect(self.markAreas)
-        self.clearMarkedButton.clicked.connect(self.clearMarked)
 
-        self.calculateConeButton.clicked.connect(self.calculateCone)
         self.testMessageButton.clicked.connect(self.giveMessage)
-        self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
         self.tied_points = []
-        self.shortestRouteButton.clicked.connect(self.calculateRoute)
-
-        # initialisation
-        # self.updateLayers()
 
         # Standing attributes - 'global variables'
         self.plugin_dir = os.path.dirname(__file__)
@@ -102,7 +95,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if msgBox.exec_() == QtGui.QMessageBox.Yes:
             self.openFire()
 
-
     def openFire(self,filename=""):
         last_dir = os.path.join(self.plugin_dir, 'sample_data')
         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
@@ -110,18 +102,14 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if new_file:
            self.iface.addProject(unicode(new_file))
 
-        #TODO fix a drop down menu to select the scenarios from instead of openieng a file-explorer window.
-        # try:
-        #     data_path = os.path.join(os.path.dirname(__file__), 'sample_data', 'Fire2_scenario.qgs')
-        # except:
-        #     self.errorOccurs()
-        # self.iface.addProject(data_path)
         self.fire_layer = self.setFireLayer()
 
     def selectFire(self):
         fire = self.selectFireButton.currentText()
         scenario_nr = 0
-        if fire == 'Fire 1':
+        if fire == ' ':
+            pass
+        elif fire == 'Fire 1':
             scenario_nr = 1
         elif fire == 'Fire 2':
             scenario_nr = 2
@@ -142,10 +130,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if fire:
             self.fire_layer = fire
 
-        # self.selectLayerCombo.clear()
-        # self.selectLayerCombo.addItems([self.fire_layer.name()])
         else:
-            uf.showMessage(self.iface, 'OBS: self.fire_layer = None', lev=2,dur=3)
+            uf.showMessage(self.iface, 'No fire scenario has been found', lev=2,dur=3)
         self.setStylesLayers()
         return fire
 
@@ -154,15 +140,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         for layer in QgsMapLayerRegistry.instance().mapLayers().values():
             processing.runalg('qgis:setstyleforvectorlayer', layer.name(), "{}{}{}".format(path, layer.name(), "_style.qml"))
-
-    # def updateLayers(self):
-    #     layers = uf.getLegendLayers(self.iface, 'all', 'all')
-    #     self.selectLayerCombo.clear()
-    #     if layers:
-    #         layer_names = uf.getLayersListNames(layers)
-    #         self.selectLayerCombo.addItems(layer_names)
-    #         self.setSelectedLayer()
-
 
     def updateDistances(self):
         severity = self.selectFireSeverityCombo.currentText()
@@ -191,19 +168,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if marked_layer:
             self.removeLegendLayer(marked_layer)
 
-    def setSelectedLayer(self):
-        """Some buttons use this method but it doesn't do anything since we have commented out everything?"""
-        # layer_name = self.selectLayerCombo.currentText()
-        # layer = uf.getLegendLayerByName(self.iface,layer_name)
-        # self.setSelectedAttribute() #before: self.updateAttributes(layer)
-        pass
-
-    # def getSelectedLayer(self):
-    #     layer_name = self.selectLayerCombo.currentText()
-    #     layer = uf.getLegendLayerByName(self.iface,layer_name)
-    #     return layer
-
-
     def setSelectedAttribute(self):
         # TODO: 'ok_areas' should be changed to the final locations layer - global variable?
         layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
@@ -225,9 +189,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             return 0
 
     def calculateDonut(self, layer=0):
-        #open layer if necessary
-        # if not layer: #TODO: ROB, I don't know why you needed this if-statement but it worked better (I think) without it /Anna
-            # layer = self.getSelectedLayer() # TODO put fire layer here
         layer = self.fire_layer
 
         #create the buffers needed min and max
@@ -239,8 +200,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #create the donut (difference)
         processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
-        #self.refreshCanvas(donut)
-
     def chooseWindDirection(self):
         choosetext = self.chooseWindDirectionCombo.currentText()
         direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
@@ -248,9 +207,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         return WindDirection
 
     def selectFeaturesBuffer(self, layer=0):
-        #Add possibility of loading def with pre-set layer
-        # if not layer:
-            # layer = self.getSelectedLayer()
         if uf.getLegendLayerByName(self.iface, "Difference"):
             intersect_layer = uf.getLegendLayerByName(self.iface, "Difference")
         elif uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
@@ -283,10 +239,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             QgsMapLayerRegistry.instance().addMapLayers([area_layer])
 
             sorted_features = uf.sortByField(area_layer, 'length')
-            self.selectTopLocations(area_layer, sorted_features)
+            top_nr = int(self.numOfResultsLineEdit.text())
+
+            self.selectTopLocations(area_layer, sorted_features, top_nr)
 
     def selectTopLocations(self, locations_layer, sorted_features, top_nr=5):
-        top = sorted_features[0:5]  # TODO add input to decide how many locations we wanna show?
+        top = sorted_features[0:top_nr]
         top_fid = []
         for feature in top:
             top_fid.append(feature[3])
@@ -317,7 +275,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateCone(self, firelayer=0):
         if self.chooseWindDirectionCombo.currentText() != 'no wind':
             if not firelayer:
-                # firelayer = self.getSelectedLayer()
                 firelayer = self.fire_layer
 
             processing.runandload('qgis:meancoordinates', firelayer, None, None, None)
@@ -355,8 +312,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             coords.append(float(attrs[1]))
 
         # select the active layer
-        #OLD layer = iface.activeLayer()
         layer = uf.getLegendLayerByName(self.iface, "Buffer")
+
         # get feature of the layer
         feature = layer.getFeatures().next()
         geom = feature.geometry()
@@ -416,16 +373,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             processing.runandload('qgis:difference', donut, bite, True, None)
 
     def defineFocalZone(self, layer=0):
-        #open layer
-        # if not layer:
-        #     layer = self.getSelectedLayer()
-
         #create the buffers needed min and max
         min_dist = self.getMaxBufferCutoff()
         max_dist = 7500
         MinBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, min_dist, 12, False, None)
         MaxBuffer = processing.runalg('qgis:fixeddistancebuffer', layer, max_dist, 12, False, None)
-
 
         #create the donut (difference)
         processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
@@ -435,7 +387,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
 
     def everythingAtOnce(self):
-        # firelayer = self.getSelectedLayer() # TODO change this to fire-layer
         firelayer = self.fire_layer
         self.calculateDonut(firelayer)
         self.calculateCone(firelayer)
@@ -450,7 +401,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.filterSelectionLayer(selection_lyr)
 
     def clearAllAnalysisLayers(self):
-
         layers = ["Symmetrical difference", "Difference", "Smoke cone", "Selection", "Intersection", "Routes",
                   "join_layer", "Regular points", "Mean coordinates", "selected_area"]
         for layer_name in layers:
@@ -577,7 +527,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         i = 0
         for item in values:
             # i is the table row, items must tbe added as QTableWidgetItems
-            # self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(i)))
             self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[3]))) #ID
             self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #Landuse
             self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[4]))) #Area
