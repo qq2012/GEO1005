@@ -145,7 +145,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.selectLayerCombo.clear()
         # self.selectLayerCombo.addItems([self.fire_layer.name()])
         else:
-            uf.showMessage(self.iface, 'OBS: self.fire_layer = None', lev=2,dur=10)
+            uf.showMessage(self.iface, 'OBS: self.fire_layer = None', lev=2,dur=3)
         return fire
 
 
@@ -176,13 +176,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.minDistLineEdit.setText(str(500))
             self.maxDistLineEdit.setText(str(1500))
 
-    def removeLegendLayer(self, buffer_layer=0):
-        if not buffer_layer:
-            buffer_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
-            QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
-            self.removeLegendLayer()
-        elif buffer_layer:
-            QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
+    def removeLegendLayer(self, layer):
+        if layer:
+            QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
 
     def clearMarked(self):
         marked_layer = uf.getLegendLayerByName(self.iface, "Selection")
@@ -265,19 +261,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             filtered_layer = None
         else:
             dicti = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
-            # filtered_layer = processing.runandload('qgis:joinattributestable', selection_layer, routes_layer, 'FID2','to_FID', None)
-            # uf.showMessage(self.iface, 'dict keys: {}'.format(dicti['OUTPUT_LAYER'], dur=10))
 
             join = dicti['OUTPUT_LAYER']
             join_layer = QgsVectorLayer(join, "join_layer", "ogr")
-            # the last load the layer
             QgsMapLayerRegistry.instance().addMapLayers([join_layer])
 
-            # request = QgsFeatureRequest().setFilterExpression( u'"Counties" = \'Norwich\'' )
-            new_join = uf.getLegendLayerByName(self.iface, 'join_layer')
-            QgsMapLayerRegistry.instance().addMapLayer(new_join)
-
-            uf.selectFeaturesByExpression(join_layer,'id>1000') #TODO why is there 2 functions selectfeaturebyexpression?
+            idx = join_layer.fieldNameIndex('Area')
+            max_area = join_layer.maximumValue(idx)
+            required_area = int(self.areaEdit.text())
+            uf.selectFeaturesByRangeValues(join_layer,'Area',required_area,max_area)
 
         # return filtered_layer
 
@@ -438,24 +430,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.filterSelectionLayer(selection_lyr)
 
     def clearAllAnalysisLayers(self):
-        if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
-        if uf.getLegendLayerByName(self.iface, "Difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Difference"))
-        if uf.getLegendLayerByName(self.iface, "Smoke cone"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Smoke cone"))
-        if uf.getLegendLayerByName(self.iface, "Selection"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Selection"))
-        if uf.getLegendLayerByName(self.iface, "Intersection"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Intersection"))
-        if uf.getLegendLayerByName(self.iface, "Routes"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Routes"))
-        if uf.getLegendLayerByName(self.iface, "join_layer"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "join_layer"))
-        if uf.getLegendLayerByName(self.iface, "Regular points"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Regular points"))
-        if uf.getLegendLayerByName(self.iface, "Mean coordinates"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Mean coordinates"))
+
+        layers = ["Symmetrical difference", "Difference", "Smoke cone", "Selection", "Intersection", "Routes",
+                  "join_layer", "Regular points", "Mean coordinates"]
+        for layer_name in layers:
+            layer = uf.getLegendLayerByName(self.iface, layer_name)
+            if layer:
+                self.removeLegendLayer(layer)
 
     def clearLegend(self):
         legend = uf.getLegendLayers(self.iface)
