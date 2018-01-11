@@ -61,7 +61,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.iface.newProjectCreated.connect(self.updateLayers)
         # self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         # self.iface.legendInterface().itemAdded.connect(self.updateLayers)
-        self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
+        #self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
         self.openFireButton.clicked.connect(self.warningLoadData)
@@ -236,11 +236,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         #self.refreshCanvas(donut)
 
-    def chooseWindDirection(self):
-        choosetext = self.chooseWindDirectionCombo.currentText()
-        direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
-        WindDirection = direction[choosetext]
-        return WindDirection
+
 
     def selectFeaturesBuffer(self, layer=0):
         #Add possibility of loading def with pre-set layer
@@ -322,22 +318,28 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
 
-            if self.chooseWindDirectionCombo.currentText() == 'N':
-                self.rotateCone(0)
-            elif self.chooseWindDirectionCombo.currentText() == 'NE':
-                self.rotateCone(45)
-            elif self.chooseWindDirectionCombo.currentText() == 'E':
-                self.rotateCone(90)
-            elif self.chooseWindDirectionCombo.currentText() == 'SE':
-                self.rotateCone(135)
-            elif self.chooseWindDirectionCombo.currentText() == 'S':
-                self.rotateCone(180)
-            elif self.chooseWindDirectionCombo.currentText() == 'SW':
-                self.rotateCone(225)
-            elif self.chooseWindDirectionCombo.currentText() == 'W':
-                self.rotateCone(270)
-            elif self.chooseWindDirectionCombo.currentText() == 'NW':
-                self.rotateCone(315)
+            choosetext = self.chooseWindDirectionCombo.currentText()
+            direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270,
+                         'NW': 315}
+            WindDirection = direction[choosetext]
+            self.rotateCone(WindDirection)
+
+            # if self.chooseWindDirectionCombo.currentText() == 'N':
+            #     self.rotateCone(0)
+            # elif self.chooseWindDirectionCombo.currentText() == 'NE':
+            #     self.rotateCone(45)
+            # elif self.chooseWindDirectionCombo.currentText() == 'E':
+            #     self.rotateCone(90)
+            # elif self.chooseWindDirectionCombo.currentText() == 'SE':
+            #     self.rotateCone(135)
+            # elif self.chooseWindDirectionCombo.currentText() == 'S':
+            #     self.rotateCone(180)
+            # elif self.chooseWindDirectionCombo.currentText() == 'SW':
+            #     self.rotateCone(225)
+            # elif self.chooseWindDirectionCombo.currentText() == 'W':
+            #     self.rotateCone(270)
+            # elif self.chooseWindDirectionCombo.currentText() == 'NW':
+            #     self.rotateCone(315)
 
     def rotateCone(self, angle):
         attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
