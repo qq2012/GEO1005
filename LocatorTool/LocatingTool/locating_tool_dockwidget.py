@@ -368,8 +368,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 cost = QgsDistanceArea().measureLine(path) #Calculates the length of the path
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost]])
 
-            style_path = "%s/styles/" % QgsProject.instance().homePath()
-            processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
+            # style_path = "%s/styles/" % QgsProject.instance().homePath()
+            # processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
 
     def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
         routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
@@ -445,7 +445,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         top_fid = []
         for feature in top:
             top_fid.append(feature[3])
-        uf.showMessage(self.iface, 'list {}'.format(top_fid))
 
         uf.selectFeaturesByListValues(locations_layer, 'FID2', top_fid)
         top_dict = processing.runalg('qgis:saveselectedfeatures', locations_layer, None)
@@ -453,11 +452,24 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         top_layer = QgsVectorLayer(top_path, "Top locations", "ogr")
         QgsMapLayerRegistry.instance().addMapLayers([top_layer])
         self.removeLegendLayer(locations_layer)
-
         path = "%s/styles/" % QgsProject.instance().homePath()
         processing.runalg('qgis:setstyleforvectorlayer', top_layer, "%stop_style.qml" % path)
 
+        self.filterRoutes(top_fid)
+
         return top_layer
+
+    def filterRoutes(self, top_fid):
+        routes_layer = uf.getLegendLayerByName(self.iface, 'Routes')
+        uf.selectFeaturesByListValues(routes_layer, 'to_FID', top_fid)
+
+        runalg = processing.runalg('qgis:saveselectedfeatures', routes_layer, None) #TODO: do we want to save this layer?
+        top_layer = self.runalgShortcut(runalg, "Fire-routes", load=True)
+
+        self.removeLegendLayer(routes_layer)
+
+        path = "%s/styles/" % QgsProject.instance().homePath()
+        processing.runalg('qgis:setstyleforvectorlayer', top_layer, "%sShortestRoute_style.qml" % path)
 
     # Reporting functions
     def extractAttributeSummary(self, layer):
@@ -524,7 +536,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def clearAllAnalysisLayers(self):
         layers = ["Symmetrical difference", "Routes","join_layer", "Regular points", "Mean coordinates",
-                  "selected_area", "Smoke cone", "Top locations"]
+                  "selected_area", "Smoke cone", "Top locations", "Fire-routes"]
         for layer_name in layers:
             layer = uf.getLegendLayerByName(self.iface, layer_name)
             if layer:
