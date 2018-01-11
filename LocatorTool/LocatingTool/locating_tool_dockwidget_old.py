@@ -61,7 +61,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.iface.newProjectCreated.connect(self.updateLayers)
         # self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         # self.iface.legendInterface().itemAdded.connect(self.updateLayers)
-        self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
+        #self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
 
         self.openFireButton.clicked.connect(self.warningLoadData)
@@ -70,7 +70,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         # self.selectLayerCombo.activated.connect(self.setSelectedLayer) #TODO: this uses the method setSelectedLayer - which doesn't do anythin, why is this line needed?
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
-        self.clearBuffersButton.clicked.connect(self.removeLegendLayer)
+        self.clearBuffersButton.clicked.connect(self.clearBuffers)
         self.markAreasButton.clicked.connect(self.markAreas)
         self.clearMarkedButton.clicked.connect(self.clearMarked)
 
@@ -78,7 +78,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.testMessageButton.clicked.connect(self.giveMessage)
         self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
-        self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
+        self.completeClearButton.clicked.connect(self.clearAll)
 
         # results tab
         self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
@@ -90,7 +90,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # Standing attributes - 'global variables'
         self.plugin_dir = os.path.dirname(__file__)
-        self.fire_layer = self.setFireLayer()
+        self.fire_layer = None
 
 
     def warningLoadData(self):
@@ -120,21 +120,19 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def selectFire(self):
         fire = self.selectFireButton.currentText()
-        scenario_nr = 0
+
         if fire == 'Fire 1':
-            scenario_nr = 1
-        elif fire == 'Fire 2':
-            scenario_nr = 2
-        elif fire == 'Fire 3':
-            scenario_nr = 3
-        elif fire == 'Fire 4':
-            scenario_nr = 4
-
-        path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
-        self.clearLegend()
-        project = QgsProject.instance().read(QFileInfo(path))
-        self.setFireLayer()
-
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire1_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 2':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire2_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 3':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire3_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
+        if fire == 'Fire 4':
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire4_scenario.qgs')
+            project_file = QgsProject.instance().read(QFileInfo(path))
 
     def setFireLayer(self):
         fire = None
@@ -144,8 +142,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # self.selectLayerCombo.clear()
         # self.selectLayerCombo.addItems([self.fire_layer.name()])
-        else:
-            uf.showMessage(self.iface, 'OBS: self.fire_layer = None', lev=2,dur=10)
+
         return fire
 
 
@@ -176,18 +173,18 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.minDistLineEdit.setText(str(500))
             self.maxDistLineEdit.setText(str(1500))
 
-    def removeLegendLayer(self, buffer_layer=0):
+    def clearBuffers(self, buffer_layer=0):
         if not buffer_layer:
             buffer_layer = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
             QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
-            self.removeLegendLayer()
+            self.clearBuffers()
         elif buffer_layer:
             QgsMapLayerRegistry.instance().removeMapLayer(buffer_layer.id())
 
     def clearMarked(self):
         marked_layer = uf.getLegendLayerByName(self.iface, "Selection")
         if marked_layer:
-            self.removeLegendLayer(marked_layer)
+            self.clearBuffers(marked_layer)
 
     def setSelectedLayer(self):
         """Some buttons use this method but it doesn't do anything since we have commented out everything?"""
@@ -239,11 +236,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         #self.refreshCanvas(donut)
 
-    def chooseWindDirection(self):
-        choosetext = self.chooseWindDirectionCombo.currentText()
-        direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270, 'NW': 315}
-        WindDirection = direction[choosetext]
-        return WindDirection
+
 
     def selectFeaturesBuffer(self, layer=0):
         #Add possibility of loading def with pre-set layer
@@ -273,10 +266,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             # the last load the layer
             QgsMapLayerRegistry.instance().addMapLayers([join_layer])
 
-            # request = QgsFeatureRequest().setFilterExpression( u'"Counties" = \'Norwich\'' )
-            new_join = uf.getLegendLayerByName(self.iface, 'join_layer')
-            QgsMapLayerRegistry.instance().addMapLayer(new_join)
-
             uf.selectFeaturesByExpression(join_layer,'id>1000') #TODO why is there 2 functions selectfeaturebyexpression?
 
         # return filtered_layer
@@ -296,7 +285,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             path = "%s/styles/" % QgsProject.instance().homePath()
             processing.runalg('qgis:setstyleforvectorlayer', selection_layer, "%sok_areas_style.qml" % path)
             ok_areas.removeSelection()
-
         return selection_layer
 
     def giveMessage(self):
@@ -330,8 +318,28 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer2 = uf.getLegendLayerByName(self.iface, "Calculated")
             processing.runandload('qgis:variabledistancebuffer', layer2, "width", 12, True, None)
 
-            wind_direction = self.chooseWindDirection()
-            self.rotateCone(wind_direction)
+            choosetext = self.chooseWindDirectionCombo.currentText()
+            direction = {'no wind': -1, 'N': 0, 'NE': 45, 'E': 90, 'SE': 135, 'S': 180, 'SW': 225, 'W': 270,
+                         'NW': 315}
+            WindDirection = direction[choosetext]
+            self.rotateCone(WindDirection)
+
+            # if self.chooseWindDirectionCombo.currentText() == 'N':
+            #     self.rotateCone(0)
+            # elif self.chooseWindDirectionCombo.currentText() == 'NE':
+            #     self.rotateCone(45)
+            # elif self.chooseWindDirectionCombo.currentText() == 'E':
+            #     self.rotateCone(90)
+            # elif self.chooseWindDirectionCombo.currentText() == 'SE':
+            #     self.rotateCone(135)
+            # elif self.chooseWindDirectionCombo.currentText() == 'S':
+            #     self.rotateCone(180)
+            # elif self.chooseWindDirectionCombo.currentText() == 'SW':
+            #     self.rotateCone(225)
+            # elif self.chooseWindDirectionCombo.currentText() == 'W':
+            #     self.rotateCone(270)
+            # elif self.chooseWindDirectionCombo.currentText() == 'NW':
+            #     self.rotateCone(315)
 
     def rotateCone(self, angle):
         attlayer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
@@ -392,10 +400,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         points = uf.getLegendLayerByName(self.iface, "Regular points")
         mean_coord_layer = uf.getLegendLayerByName(self.iface, "Mean coordinates")
         cone_width_layer = uf.getLegendLayerByName(self.iface, "Calculated")
-        self.removeLegendLayer(cone_layer)
-        self.removeLegendLayer(points)
-        self.removeLegendLayer(mean_coord_layer)
-        self.removeLegendLayer(cone_width_layer)
+        self.clearBuffers(cone_layer)
+        self.clearBuffers(points)
+        self.clearBuffers(mean_coord_layer)
+        self.clearBuffers(cone_width_layer)
 
     def biteFromDonut(self):
         donut = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
@@ -430,37 +438,32 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.biteFromDonut()
         selection_lyr = self.markAreas()
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
         if uf.getLegendLayerByName(self.iface, "Difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Difference"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
         self.defineFocalZone(firelayer)
         self.calculateRoute()
         self.filterSelectionLayer(selection_lyr)
 
-    def clearAllAnalysisLayers(self):
+    def clearAll(self):
         if uf.getLegendLayerByName(self.iface, "Symmetrical difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Symmetrical difference"))
         if uf.getLegendLayerByName(self.iface, "Difference"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Difference"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Difference"))
         if uf.getLegendLayerByName(self.iface, "Smoke cone"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Smoke cone"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Smoke cone"))
         if uf.getLegendLayerByName(self.iface, "Selection"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Selection"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Selection"))
         if uf.getLegendLayerByName(self.iface, "Intersection"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Intersection"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Intersection"))
         if uf.getLegendLayerByName(self.iface, "Routes"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Routes"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Routes"))
         if uf.getLegendLayerByName(self.iface, "join_layer"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "join_layer"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "join_layer"))
         if uf.getLegendLayerByName(self.iface, "Regular points"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Regular points"))
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Regular points"))
         if uf.getLegendLayerByName(self.iface, "Mean coordinates"):
-            self.removeLegendLayer(uf.getLegendLayerByName(self.iface, "Mean coordinates"))
-
-    def clearLegend(self):
-        legend = uf.getLegendLayers(self.iface)
-        for layer in legend:
-            self.removeLegendLayer(layer)
+            self.clearBuffers(uf.getLegendLayerByName(self.iface, "Mean coordinates"))
 
     #############################
     #   Network and route methods
@@ -589,7 +592,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.statisticsTable.clear()
 
     def closeEvent(self, event):
-        self.clearAllAnalysisLayers()
+        self.clearAll()
         self.closingPlugin.emit()
         event.accept()
 
