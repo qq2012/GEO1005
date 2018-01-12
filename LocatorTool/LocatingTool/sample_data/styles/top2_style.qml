@@ -63,7 +63,7 @@
     <property key="labeling/centroidInside" value="false"/>
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/decimals" value="3"/>
-    <property key="labeling/displayAll" value="false"/>
+    <property key="labeling/displayAll" value="true"/>
     <property key="labeling/dist" value="0"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/distMapUnitScale" value="0,0,0,0,0,0"/>
@@ -112,13 +112,13 @@
     <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/previewBkgrdColor" value="#ffffff"/>
     <property key="labeling/priority" value="5"/>
-    <property key="labeling/quadOffset" value="2"/>
+    <property key="labeling/quadOffset" value="4"/>
     <property key="labeling/repeatDistance" value="0"/>
     <property key="labeling/repeatDistanceMapUnitScale" value="0,0,0,0,0,0"/>
     <property key="labeling/repeatDistanceUnit" value="1"/>
     <property key="labeling/reverseDirectionSymbol" value="false"/>
     <property key="labeling/rightDirectionSymbol" value=">"/>
-    <property key="labeling/scaleMax" value="20000"/>
+    <property key="labeling/scaleMax" value="15000"/>
     <property key="labeling/scaleMin" value="1"/>
     <property key="labeling/scaleVisibility" value="true"/>
     <property key="labeling/shadowBlendMode" value="6"/>
@@ -179,7 +179,7 @@
     <property key="labeling/upsidedownLabels" value="0"/>
     <property key="labeling/useSubstitutions" value="false"/>
     <property key="labeling/wrapChar" value=""/>
-    <property key="labeling/xOffset" value="30"/>
+    <property key="labeling/xOffset" value="0"/>
     <property key="labeling/yOffset" value="0"/>
     <property key="labeling/zIndex" value="0"/>
     <property key="variableNames"/>

@@ -81,6 +81,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
         self.selectLocationButton.clicked.connect(self.selectLocation)
+        self.clearSelectionButton.clicked.connect(self.clearTopSelection)
 
         # results tab
         self.tied_points = []
@@ -505,7 +506,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         for item in values:
             # i is the table row, items must tbe added as QTableWidgetItems
             # self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(i)))
-            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(int(item[0])))) #eng_desc
+            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(int(item[0])))) #fid
             self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #eng_desc
             self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[2]))) #area
             self.statisticsTable.setItem(i,3,QtGui.QTableWidgetItem(unicode(int(item[3])))) #length
@@ -517,7 +518,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def clearTable(self):
         self.statisticsTable.clear()
 
-    # User function
+    # User functions
     def zoomToTopLocations(self):
         vLayer = uf.getLegendLayerByName(self.iface, 'Top locations')
         extent = vLayer.extent()
@@ -531,16 +532,27 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas.refresh()
 
     def selectLocation(self):
-        # selection = self.statisticsTable.selectedItems()
-        # sel = self.statisticsTable.selectedIndexes()
-        # sel2 = self.statisticsTable.selectionModel().selectedRows()
+        top_layer = uf.getLegendLayerByName(self.iface, 'Top locations')
+        top_layer.removeSelection()
         rows = []
         for idx in self.statisticsTable.selectedIndexes():
             rows.append(idx.row())
 
-        uf.showMessage(self.iface, 'sel {}'.format(rows))
+        unique_rows = set(rows) # the rows that are selected
+        fids = [] #list with selected FIDs
+        for fid in unique_rows:
+            fids.append(float(self.statisticsTable.item(fid, 0).text()))
 
-    #Help functions
+        uf.selectFeaturesByListValues(top_layer, 'FID2', fids)
+        self.zoomToTopLocations()
+
+        # TODO: add self.zoomFocalArea()
+
+    def clearTopSelection(self):
+        top_layer = uf.getLegendLayerByName(self.iface, 'Top locations')
+        top_layer.removeSelection()
+
+    # Help functions
     def runalgShortcut(self, dicti, name='layer', memory=False, load=False):
         path = dicti[dicti.keys()[0]]
         if not memory:
