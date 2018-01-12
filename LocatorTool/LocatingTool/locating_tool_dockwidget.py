@@ -77,6 +77,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # self.testMessageButton.clicked.connect(self.giveMessage)
         self.zoomToLocations.clicked.connect(self.zoomToTopLocations)
+        self.zoomToFocusAreaButton.clicked.connect(self.zoomToFocusArea)
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
         self.selectLocationButton.clicked.connect(self.selectLocation)
@@ -518,10 +519,16 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     # User function
     def zoomToTopLocations(self):
-        canvas = self.iface.mapCanvas()
-        locations = uf.getLegendLayerByName(self.iface, 'Top locations')
-        canvas.zoomToSelected(locations) #TODO: this does not work?!?!
-        canvas.zoomIn()
+        vLayer = uf.getLegendLayerByName(self.iface, 'Top locations')
+        extent = vLayer.extent()
+        self.canvas.setExtent(extent)
+        self.canvas.refresh()
+
+    def zoomToFocusArea(self):
+        vLayer = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut', 'ogr')
+        extent = vLayer.extent()
+        self.canvas.setExtent(extent)
+        self.canvas.refresh()
 
     def selectLocation(self):
         # selection = self.statisticsTable.selectedItems()

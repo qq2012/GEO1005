@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
+    <width>379</width>
     <height>646</height>
    </rect>
   </property>
@@ -40,8 +40,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>427</width>
-            <height>574</height>
+            <width>341</width>
+            <height>586</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
@@ -335,6 +335,20 @@ RULE THEM ALL</string>
              </property>
             </widget>
            </item>
+           <item row="21" column="1">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Suggested locations </string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="2">
+            <widget class="QPushButton" name="selectLocationButton">
+             <property name="text">
+              <string>Select location</string>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="2">
             <widget class="QComboBox" name="selectFireButton">
              <property name="sizePolicy">
@@ -370,17 +384,10 @@ RULE THEM ALL</string>
              </item>
             </widget>
            </item>
-           <item row="21" column="1">
-            <widget class="QLabel" name="label_7">
+           <item row="19" column="1">
+            <widget class="QPushButton" name="zoomToFocusAreaButton">
              <property name="text">
-              <string>Suggested locations </string>
-             </property>
-            </widget>
-           </item>
-           <item row="19" column="2">
-            <widget class="QPushButton" name="selectLocationButton">
-             <property name="text">
-              <string>Select location</string>
+              <string>Show Focus Area</string>
              </property>
             </widget>
            </item>
