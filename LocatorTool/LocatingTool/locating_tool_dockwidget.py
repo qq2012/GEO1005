@@ -82,6 +82,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
         self.selectLocationButton.clicked.connect(self.selectLocation)
         self.clearSelectionButton.clicked.connect(self.clearTopSelection)
+        self.createReportButton.clicked.connect(self.createReport)
 
         # results tab
         self.tied_points = []
@@ -596,8 +597,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             try:
                 if os.path.isfile(file_path) and the_file != 'doNotRemove.txt':
                     os.unlink(file_path)
-            except Exception as e:
+            except Exception:
                 uf.showMessage(self.iface, 'OBS analysis_data folder not cleared completely!', lev=2, dur=5)
+
+    def createReport(self):
+        path = os.path.join(self.plugin_dir, 'sample_data')
+        self.iface.mapCanvas().saveAsImage("{}/screenshot.png".format(path))
 
     # The BIG button function
     def everythingAtOnce(self):

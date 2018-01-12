@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>483</width>
-    <height>646</height>
+    <height>725</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
        </sizepolicy>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="1">
+       <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea">
          <property name="widgetResizable">
           <bool>true</bool>
@@ -40,8 +40,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>434</width>
-            <height>574</height>
+            <width>445</width>
+            <height>665</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
@@ -255,19 +255,6 @@ RULE THEM ALL</string>
              </property>
             </widget>
            </item>
-           <item row="14" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Max Distance</string>
-             </property>
-            </widget>
-           </item>
            <item row="5" column="2">
             <widget class="QLineEdit" name="areaEdit">
              <property name="sizePolicy">
@@ -371,7 +358,28 @@ RULE THEM ALL</string>
              </item>
             </widget>
            </item>
-           <item row="13" column="0">
+           <item row="23" column="0">
+            <widget class="QPushButton" name="selectLocationButton">
+             <property name="text">
+              <string>Select location</string>
+             </property>
+            </widget>
+           </item>
+           <item row="23" column="1">
+            <widget class="QPushButton" name="clearSelectionButton">
+             <property name="text">
+              <string>Clear selection</string>
+             </property>
+            </widget>
+           </item>
+           <item row="23" column="2">
+            <widget class="QPushButton" name="createReportButton">
+             <property name="text">
+              <string>Save screenshot</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="0">
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -384,17 +392,16 @@ RULE THEM ALL</string>
              </property>
             </widget>
            </item>
-           <item row="23" column="0">
-            <widget class="QPushButton" name="selectLocationButton">
-             <property name="text">
-              <string>Select location</string>
+           <item row="13" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-            </widget>
-           </item>
-           <item row="23" column="1">
-            <widget class="QPushButton" name="clearSelectionButton">
              <property name="text">
-              <string>Clear selection</string>
+              <string>Max Distance</string>
              </property>
             </widget>
            </item>
