@@ -191,7 +191,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         #create the donut (difference)
         runalg = processing.runalg('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], '{}/analysis_data/donut.shp'.format(self.plugin_dir))
-        self.runalgShortcut(runalg, 'donut')
+        donut_layer = self.runalgShortcut(runalg, 'donut')
+        QgsMapLayerRegistry.instance().addMapLayer(donut_layer)
+        return donut_layer
 
     def chooseWindDirection(self):
         choosetext = self.chooseWindDirectionCombo.currentText()
@@ -290,11 +292,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.removeLegendLayer(mean_coord_layer)
         self.removeLegendLayer(cone_width_layer)
 
-    def biteFromDonut(self):
+    def biteFromDonut(self, donut_layer):
         donut = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'test', 'ogr')
         bite = uf.getLegendLayerByName(self.iface, "Smoke cone") #TODO change!
         if donut and bite:
             self.runalgShortcut(processing.runalg('qgis:difference', donut, bite, True, '{}/analysis_data/donut_bite.shp'.format(self.plugin_dir)))
+            QgsMapLayerRegistry.instance().removeMapLayer(donut_layer.id())
 
     def focusArea(self, layer=0):
         #create the buffers needed min and max
@@ -407,9 +410,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             runalg = processing.runalg('qgis:saveselectedfeatures', ok_areas,
                                        '{}/analysis_data/Selection.shp'.format(self.plugin_dir))
             selection_layer = self.runalgShortcut(runalg, 'Selection')
-            # QgsMapLayerRegistry.instance().addMapLayers([selection_layer])
+            QgsMapLayerRegistry.instance().addMapLayers([selection_layer])
+            QgsMapLayerRegistry.instance().addMapLayers([result_area])
             ok_areas.removeSelection()
 
+        QgsMapLayerRegistry.instance().removeMapLayer(result_area.id())
         return selection_layer
 
     def filterSelectionLayer(self, selection_layer):
@@ -418,11 +423,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if not routes_layer:
             filtered_layer = None
         else:
-            dicti = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID', None)
-
+            dicti = processing.runalg('qgis:joinattributestable', selection_layer, routes_layer, 'FID2', 'to_FID',
+                                       '{}/analysis_data/join_layer.shp'.format(self.plugin_dir))
             join_path = dicti[dicti.keys()[0]]  # this is the folder path to the layer
             join_layer = QgsVectorLayer(join_path, "join_layer", "ogr")
-            # QgsMapLayerRegistry.instance().addMapLayers([join_layer])
+            QgsMapLayerRegistry.instance().addMapLayers([join_layer])
 
             idx = join_layer.fieldNameIndex('Area')
             max_area = join_layer.maximumValue(idx)
@@ -433,7 +438,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
             area_layer = QgsVectorLayer(area_dict[area_dict.keys()[0]], 'selected_area', 'ogr')
             QgsMapLayerRegistry.instance().addMapLayers([area_layer])
-
+            QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
+            QgsMapLayerRegistry.instance().removeMapLayer(join_layer.id())
             sorted_features = uf.sortByField(area_layer, 'length')
 
 
@@ -541,6 +547,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer = uf.getLegendLayerByName(self.iface, layer_name)
             if layer:
                 self.removeLegendLayer(layer)
+        self.clearAnalysisDataFolder()
 
     def clearAnalysisDataFolder(self):
         folder = '{}/analysis_data/'.format(self.plugin_dir)
@@ -559,9 +566,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.clearAnalysisDataFolder()
             firelayer = self.fire_layer
-            self.calculateDonut(firelayer)
+            donut_layer = self.calculateDonut(firelayer)
             self.calculateCone(firelayer)
-            self.biteFromDonut()
+            self.biteFromDonut(donut_layer)
             selection_lyr = self.markAreas()
             self.focusArea(firelayer)
             self.calculateRoute()
