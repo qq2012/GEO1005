@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
+    <width>464</width>
     <height>585</height>
    </rect>
   </property>
@@ -17,8 +17,8 @@
    <string>Locating Tool</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="1">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
@@ -30,9 +30,9 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="tab1" native="true">
+      <widget class="QWidget" name="tab1">
        <attribute name="title">
         <string>Input</string>
        </attribute>
@@ -47,13 +47,13 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>469</width>
-             <height>499</height>
+             <width>408</width>
+             <height>615</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
-            <item row="14" column="0">
-             <widget class="QLabel" name="label">
+            <item row="13" column="2">
+             <widget class="QLineEdit" name="minDistLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -61,118 +61,11 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Min Distance</string>
+               <string>500</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Max Distance</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QLineEdit" name="numOfResultsLineEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>5</string>
-              </property>
-             </widget>
-            </item>
-            <item row="17" column="0" colspan="3">
-             <widget class="QPushButton" name="completeClearButton">
-              <property name="text">
-               <string>Clear analysis</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Wind Direction</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QComboBox" name="selectFireButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <item>
-               <property name="text">
-                <string/>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Fire 1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Fire 2</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Fire 3</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Fire 4</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="areaEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>1000</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="2">
-             <widget class="QPushButton" name="openFireButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Manually open fire scene</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
+            <item row="8" column="2">
              <widget class="QComboBox" name="chooseWindDirectionCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -227,26 +120,68 @@
               </item>
              </widget>
             </item>
-            <item row="16" column="0" colspan="3">
-             <widget class="QPushButton" name="everythingAtOnceButton">
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-                <underline>true</underline>
-               </font>
-              </property>
-              <property name="autoFillBackground">
-               <bool>false</bool>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
               <property name="text">
-               <string>ONE BUTTON TO
-RULE THEM ALL</string>
+               <string>Required area</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="1" column="2">
+             <widget class="QComboBox" name="selectFireButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string/>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fire 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fire 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fire 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fire 4</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="6" column="0" colspan="2">
+             <widget class="QLabel" name="label_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Number of results wanted</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
              <widget class="QLabel" name="label_6">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -259,7 +194,100 @@ RULE THEM ALL</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="2">
+            <item row="16" column="0" colspan="3">
+             <widget class="QPushButton" name="completeClearButton">
+              <property name="text">
+               <string>Clear analysis</string>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="0" colspan="3">
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Min Distance</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0" colspan="3">
+             <widget class="QPushButton" name="everythingAtOnceButton">
+              <property name="font">
+               <font>
+                <pointsize>30</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+                <underline>false</underline>
+               </font>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>
+Find locations
+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Wind Direction</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="areaEdit">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>1000</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="fireSeverityLabel">
+              <property name="text">
+               <string>Fire Severity</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Max Distance</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="2">
              <widget class="QLineEdit" name="maxDistLineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -272,7 +300,20 @@ RULE THEM ALL</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="2">
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="numOfResultsLineEdit">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="2">
              <widget class="QComboBox" name="selectFireSeverityCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -308,55 +349,30 @@ RULE THEM ALL</string>
              </widget>
             </item>
             <item row="18" column="0" colspan="3">
-             <widget class="Line" name="line">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="fireSeverityLabel">
-              <property name="text">
-               <string>Fire Severity</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="legend1Label">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text">
-               <string>Required area</string>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>200</height>
+               </size>
               </property>
-             </widget>
-            </item>
-            <item row="7" column="0" colspan="2">
-             <widget class="QLabel" name="label_5">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Number of results wanted</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="2">
-             <widget class="QLineEdit" name="minDistLineEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>200</height>
+               </size>
               </property>
               <property name="text">
-               <string>500</string>
+               <string/>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -371,7 +387,14 @@ RULE THEM ALL</string>
         <string>Results</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <widget class="QScrollArea" name="scrollArea_2">
           <property name="widgetResizable">
            <bool>true</bool>
@@ -381,117 +404,111 @@ RULE THEM ALL</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>469</width>
-             <height>499</height>
+             <width>446</width>
+             <height>587</height>
             </rect>
            </property>
-           <widget class="QPushButton" name="zoomToLocations">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>0</y>
-              <width>79</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Show locations</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="selectLocationButton">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>165</y>
-              <width>79</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Select location</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_8">
-            <property name="geometry">
-             <rect>
-              <x>95</x>
-              <y>29</y>
-              <width>197</width>
-              <height>13</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Suggested locations </string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="zoomToFocusAreaButton">
-            <property name="geometry">
-             <rect>
-              <x>95</x>
-              <y>0</y>
-              <width>197</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Show Focus Area</string>
-            </property>
-           </widget>
-           <widget class="QTableWidget" name="statisticsTable">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>48</y>
-              <width>421</width>
-              <height>111</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="clearSelectionButton">
-            <property name="geometry">
-             <rect>
-              <x>95</x>
-              <y>165</y>
-              <width>197</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Clear selection</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="createReportButton">
-            <property name="geometry">
-             <rect>
-              <x>298</x>
-              <y>165</y>
-              <width>133</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Save screenshot</string>
-            </property>
-           </widget>
-           <widget class="Line" name="line_2">
-            <property name="geometry">
-             <rect>
-              <x>17</x>
-              <y>220</y>
-              <width>361</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="zoomToLocations">
+              <property name="text">
+               <string>Show locations</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="selectLocationButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Select location</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="zoomToFocusAreaButton">
+              <property name="text">
+               <string>Show Focus Area</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Suggested locations </string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="clearSelectionButton">
+              <property name="text">
+               <string>Clear selection</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="createReportButton">
+              <property name="text">
+               <string>Save screenshot</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="3">
+             <widget class="QTableWidget" name="statisticsTable">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0" colspan="3">
+             <widget class="QLabel" name="legend2Label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>250</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>250</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0" colspan="3">
+             <widget class="Line" name="line_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>

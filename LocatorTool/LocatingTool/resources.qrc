@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/plugins/LocatingTool" >
+    <qresource prefix="/" >
         <file>icon.png</file>
+        <file>icon/Legend1.png</file>
+        <file>icon/Legend2.png</file>
     </qresource>
 </RCC>

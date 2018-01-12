@@ -69,7 +69,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.shortestRouteButton.clicked.connect(self.calculateRoute)
         # self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
 
-        # self.openFireButton.clicked.connect(self.openFire)
+        self.openFireButton.clicked.connect(self.openFire)
         self.selectFireButton.activated.connect(self.selectFire) # This is not a button - it's a comboBox!
 
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
@@ -82,8 +82,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
         self.selectLocationButton.clicked.connect(self.selectLocation)
         self.clearSelectionButton.clicked.connect(self.clearTopSelection)
-        self.createReportButton.clicked.connect(self.createReport)
-
 
         # results tab
         self.tied_points = []
@@ -91,10 +89,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # Standing attributes - 'global variables'
         self.plugin_dir = os.path.dirname(__file__)
         self.fire_layer = self.setFireLayer()
-
-        # Legend images
-        self.legend1Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend1.png'))
-        self.legend2Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend2.png'))
 
     # Initial settings functions
 
@@ -107,15 +101,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if msgBox.exec_() == QtGui.QMessageBox.Yes:
             return True
 
-    # def openFire(self,filename=""):
-    #     if self.messageBoxExecute("All current layers will be dropped, do you want to continue?"):
-    #         last_dir = os.path.join(self.plugin_dir, 'sample_data')
-    #         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-    #
-    #     if new_file:
-    #        self.iface.addProject(unicode(new_file))
-    #
-    #     self.fire_layer = self.setFireLayer()
+    def openFire(self,filename=""):
+        if self.messageBoxExecute("All current layers will be dropped, do you want to continue?"):
+            last_dir = os.path.join(self.plugin_dir, 'sample_data')
+            new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
+
+            if new_file:
+               self.iface.addProject(unicode(new_file))
+
+            self.fire_layer = self.setFireLayer()
 
     def selectFire(self):
         if self.messageBoxExecute("You are changing Fire Scene!\nAll current layers will be dropped, do you want to continue?"):
@@ -133,11 +127,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             elif fire == 'Fire 4':
                 scenario_nr = 4
 
-        path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
-        self.clearLegend()
-        project = QgsProject.instance().read(QFileInfo(path))
-        self.setFireLayer()
-        self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
+            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
+            self.clearLegend()
+            project = QgsProject.instance().read(QFileInfo(path))
+            self.setFireLayer()
+            self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
 
     def setFireLayer(self):
         fire = None
@@ -606,12 +600,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             try:
                 if os.path.isfile(file_path) and the_file != 'doNotRemove.txt':
                     os.unlink(file_path)
-            except Exception:
+            except Exception as e:
                 uf.showMessage(self.iface, 'OBS analysis_data folder not cleared completely!', lev=2, dur=5)
-
-    def createReport(self):
-        path = os.path.join(self.plugin_dir, 'sample_data')
-        self.iface.mapCanvas().saveAsImage("{}/screenshot.png".format(path))
 
     # The BIG button function
     def everythingAtOnce(self):
