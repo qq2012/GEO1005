@@ -75,9 +75,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
 
-        self.testMessageButton.clicked.connect(self.giveMessage)
+        # self.testMessageButton.clicked.connect(self.giveMessage)
+        self.zoomToLocations.clicked.connect(self.zoomToTopLocations)
         self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
+        self.selectLocationButton.clicked.connect(self.selectLocation)
 
         # results tab
         self.tied_points = []
@@ -310,6 +312,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runandload('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], None)
 
         testname = uf.getLegendLayerByName(self.iface, "Symmetrical difference")
+        testname.setLayerName('Focus area')
 
         path = "%s/styles/" % QgsProject.instance().homePath()
         processing.runalg('qgis:setstyleforvectorlayer', testname, "%sfocal_zone_style.qml" % path)
@@ -481,7 +484,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def extractAttributeSummary(self, layer):
         # get summary of the attribute
         fields = uf.getFieldNames(layer)
-        attribute = [fields[0], fields[2], fields[5]]  # desc, area, length
+        attribute = [fields[3],fields[0], fields[2], fields[5]]  # desc, area, length
         summary = []
         for feature in layer.getFeatures():
             row = [] #contains all the attributes for the current feature
@@ -494,16 +497,17 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.updateTable(summary)
 
     def updateTable(self, values):
-        self.statisticsTable.setColumnCount(3)
-        self.statisticsTable.setHorizontalHeaderLabels(["Landuse", "Size", "Distance"])
+        self.statisticsTable.setColumnCount(4)
+        self.statisticsTable.setHorizontalHeaderLabels(["ID","Landuse", "Size", "Distance"])
         self.statisticsTable.setRowCount(len(values))
         i = 0
         for item in values:
             # i is the table row, items must tbe added as QTableWidgetItems
             # self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(i)))
-            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(item[0]))) #eng_desc
-            self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #area
-            self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[2]))) #length
+            self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(int(item[0])))) #eng_desc
+            self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #eng_desc
+            self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[2]))) #area
+            self.statisticsTable.setItem(i,3,QtGui.QTableWidgetItem(unicode(int(item[3])))) #length
             i += 1
         self.statisticsTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         self.statisticsTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
@@ -512,7 +516,24 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def clearTable(self):
         self.statisticsTable.clear()
 
-    # help functions
+    # User function
+    def zoomToTopLocations(self):
+        canvas = self.iface.mapCanvas()
+        locations = uf.getLegendLayerByName(self.iface, 'Top locations')
+        canvas.zoomToSelected(locations) #TODO: this does not work?!?!
+        canvas.zoomIn()
+
+    def selectLocation(self):
+        # selection = self.statisticsTable.selectedItems()
+        # sel = self.statisticsTable.selectedIndexes()
+        # sel2 = self.statisticsTable.selectionModel().selectedRows()
+        rows = []
+        for idx in self.statisticsTable.selectedIndexes():
+            rows.append(idx.row())
+
+        uf.showMessage(self.iface, 'sel {}'.format(rows))
+
+    #Help functions
     def runalgShortcut(self, dicti, name='layer', memory=False, load=False):
         path = dicti[dicti.keys()[0]]
         if not memory:
@@ -541,7 +562,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.removeLegendLayer(layer)
 
     def clearAllAnalysisLayers(self):
-        layers = ["Symmetrical difference", "Routes","join_layer", "Regular points", "Mean coordinates",
+        layers = ["Focus area", "Routes","join_layer", "Regular points", "Mean coordinates",
                   "selected_area", "Smoke cone", "Top locations", "Fire-routes"]
         for layer_name in layers:
             layer = uf.getLegendLayerByName(self.iface, layer_name)
@@ -554,7 +575,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         for the_file in os.listdir(folder):
             file_path = os.path.join(folder, the_file)
             try:
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path) and the_file != 'doNotRemove.txt':
                     os.unlink(file_path)
             except Exception as e:
                 uf.showMessage(self.iface, 'OBS analysis_data folder not cleared completely!', lev=2, dur=5)
