@@ -118,6 +118,23 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         project = QgsProject.instance().read(QFileInfo(path))
         self.setFireLayer()
         self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
+        self.updateFireInfotextBrowser(fire)
+
+    def updateFireInfotextBrowser(self, fire):
+        if fire == ' ':
+            pass
+        elif fire == 'Fire 1':
+            self.FireInfotextBrowser.setHtml(
+                'Katendrecht is on fire\nTime:17:00\nall people have been evacuated')
+        elif fire == 'Fire 2':
+            self.FireInfotextBrowser.setHtml(
+                'Busness building is on fire\nTime:19:00\nsome people work late may still be there.')
+        elif fire == 'Fire 3':
+            self.FireInfotextBrowser.setHtml(
+                'Shopping mall and its belonging buildings are on fire\nTime:12:00\na lot of people still struggling there.')
+        elif fire == 'Fire 4':
+            self.FireInfotextBrowser.setHtml(
+                'residence zone on fire\nTime:23:50\nsome people has been evacuated but people fall in sleep may still be there.')
 
     def setFireLayer(self):
         fire = None
