@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="2.18.2" simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+<qgis version="2.18.15" simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" readOnly="0" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
   <edittypes>
     <edittype widgetv2type="TextEdit" name="id">
       <widgetv2config IsMultiline="0" fieldEditable="1" constraint="" UseHtml="0" labelOnTop="0" constraintDescription="" notNull="0"/>
@@ -28,19 +28,22 @@
   </edittypes>
   <renderer-v2 attr="eng_desc" forceraster="0" symbollevels="0" type="categorizedSymbol" enableorderby="0">
     <categories>
-      <category render="true" symbol="0" value="Agricultur" label="Agricultur"/>
-      <category render="true" symbol="1" value="Built are" label="Built are"/>
+      <category render="true" symbol="0" value="Agriculture" label="Agriculture"/>
+      <category render="true" symbol="1" value="Built area" label="Built area"/>
       <category render="true" symbol="2" value="Business" label="Business"/>
       <category render="true" symbol="3" value="Forest" label="Forest"/>
       <category render="true" symbol="4" value="Recreation" label="Recreation"/>
-      <category render="true" symbol="5" value="Semi built" label="Semi built"/>
-      <category render="true" symbol="6" value="" label=""/>
+      <category render="true" symbol="5" value="Semi-built area" label="Semi-built area"/>
+      <category render="true" symbol="6" value="Main road" label="Main road"/>
+      <category render="true" symbol="7" value="Railroad" label="Railroad"/>
+      <category render="true" symbol="8" value="Water" label="Water"/>
+      <category render="true" symbol="9" value="Wet natura" label="Wet natura"/>
     </categories>
     <symbols>
       <symbol alpha="1" clip_to_extent="1" type="fill" name="0">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="232,234,115,255"/>
+          <prop k="color" v="234,208,115,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -100,7 +103,7 @@
       <symbol alpha="1" clip_to_extent="1" type="fill" name="4">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="101,223,185,255"/>
+          <prop k="color" v="217,255,173,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -115,7 +118,7 @@
       <symbol alpha="1" clip_to_extent="1" type="fill" name="5">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="251,203,220,255"/>
+          <prop k="color" v="255,135,177,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -130,12 +133,57 @@
       <symbol alpha="1" clip_to_extent="1" type="fill" name="6">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="189,224,248,255"/>
+          <prop k="color" v="194,199,198,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
           <prop k="offset_unit" v="MM"/>
-          <prop k="outline_color" v="150,150,150,255"/>
+          <prop k="outline_color" v="0,0,0,255"/>
+          <prop k="outline_style" v="solid"/>
+          <prop k="outline_width" v="0.26"/>
+          <prop k="outline_width_unit" v="MM"/>
+          <prop k="style" v="solid"/>
+        </layer>
+      </symbol>
+      <symbol alpha="1" clip_to_extent="1" type="fill" name="7">
+        <layer pass="0" class="SimpleFill" locked="0">
+          <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="color" v="254,204,86,255"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0,0"/>
+          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="offset_unit" v="MM"/>
+          <prop k="outline_color" v="0,0,0,255"/>
+          <prop k="outline_style" v="solid"/>
+          <prop k="outline_width" v="0.26"/>
+          <prop k="outline_width_unit" v="MM"/>
+          <prop k="style" v="solid"/>
+        </layer>
+      </symbol>
+      <symbol alpha="1" clip_to_extent="1" type="fill" name="8">
+        <layer pass="0" class="SimpleFill" locked="0">
+          <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="color" v="183,233,255,255"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0,0"/>
+          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="offset_unit" v="MM"/>
+          <prop k="outline_color" v="0,0,0,255"/>
+          <prop k="outline_style" v="solid"/>
+          <prop k="outline_width" v="0.26"/>
+          <prop k="outline_width_unit" v="MM"/>
+          <prop k="style" v="solid"/>
+        </layer>
+      </symbol>
+      <symbol alpha="1" clip_to_extent="1" type="fill" name="9">
+        <layer pass="0" class="SimpleFill" locked="0">
+          <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="color" v="178,162,254,255"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0,0"/>
+          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="offset_unit" v="MM"/>
+          <prop k="outline_color" v="0,0,0,255"/>
           <prop k="outline_style" v="solid"/>
           <prop k="outline_width" v="0.26"/>
           <prop k="outline_width_unit" v="MM"/>
@@ -194,7 +242,7 @@
     <property key="labeling/fieldName" value=""/>
     <property key="labeling/fitInPolygonOnly" value="false"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value=".SF NS Text"/>
+    <property key="labeling/fontFamily" value="MS Shell Dlg 2"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontLimitPixelSize" value="false"/>
@@ -221,7 +269,7 @@
     <property key="labeling/minFeatureSize" value="0"/>
     <property key="labeling/multilineAlign" value="4294967295"/>
     <property key="labeling/multilineHeight" value="1"/>
-    <property key="labeling/namedStyle" value=""/>
+    <property key="labeling/namedStyle" value="Normal"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/obstacleFactor" value="1"/>
     <property key="labeling/obstacleType" value="0"/>
@@ -361,7 +409,7 @@
     </symbol>
   </SingleCategoryDiagramRenderer>
   <DiagramLayerSettings yPosColumn="-1" showColumn="-1" linePlacementFlags="10" placement="0" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-  <annotationform>.</annotationform>
+  <annotationform>../../../data_MCC</annotationform>
   <aliases>
     <alias field="id" index="0" name=""/>
     <alias field="BG2012" index="1" name=""/>
@@ -375,7 +423,7 @@
   <excludeAttributesWMS/>
   <excludeAttributesWFS/>
   <attributeactions default="-1"/>
-  <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="1504633158">
+  <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
     <columns>
       <column width="-1" hidden="0" type="field" name="eng_desc"/>
       <column width="-1" hidden="1" type="actions"/>
@@ -388,10 +436,10 @@
       <column width="-1" hidden="0" type="field" name="Shape_Area"/>
     </columns>
   </attributetableconfig>
-  <editform>.</editform>
+  <editform>../../../data_MCC</editform>
   <editforminit/>
   <editforminitcodesource>0</editforminitcodesource>
-  <editforminitfilepath>.</editforminitfilepath>
+  <editforminitfilepath>../../../data_MCC</editforminitfilepath>
   <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is
@@ -416,5 +464,16 @@ def my_form_open(dialog, layer, feature):
     <rowstyles/>
     <fieldstyles/>
   </conditionalstyles>
+  <defaults>
+    <default field="id" expression=""/>
+    <default field="BG2012" expression=""/>
+    <default field="BG2010" expression=""/>
+    <default field="Omschrijvi" expression=""/>
+    <default field="Hoofdgroep" expression=""/>
+    <default field="Shape_Leng" expression=""/>
+    <default field="Shape_Area" expression=""/>
+    <default field="eng_desc" expression=""/>
+  </defaults>
+  <previewExpression>COALESCE("FID", '&lt;NULL>')</previewExpression>
   <layerGeometryType>2</layerGeometryType>
 </qgis>

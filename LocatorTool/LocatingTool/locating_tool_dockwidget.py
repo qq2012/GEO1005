@@ -176,7 +176,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     # analysis functions
     def setSelectedAttribute(self):
-        layer = uf.getLegendLayerByName(self.iface, 'ok_areas_final')
+        layer = uf.getLegendLayerByName(self.iface, 'Available_areas')
         fields = uf.getFieldNames(layer)
         self.extractAttributeSummary(fields)
 
@@ -418,7 +418,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             uf.showMessage(self.iface, 'no donut', dur=5)
             result_area = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut_bite', 'ogr')
 
-        ok_areas = uf.getLegendLayerByName(self.iface, "ok_areas_final")
+        ok_areas = uf.getLegendLayerByName(self.iface, "Available_areas")
         # Check possibility of this function
         if result_area and ok_areas:
             self.selectFeaturesBuffer(ok_areas)
@@ -611,7 +611,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def createReport(self):
         path = os.path.join(self.plugin_dir, 'sample_data')
-        self.iface.mapCanvas().saveAsImage("{}/screenshot.png".format(path))
+        new_file = QtGui.QFileDialog.getSaveFileName(self, "", path, "(*.png)")
+        self.iface.mapCanvas().saveAsImage("{}".format(new_file))
 
     # The BIG button function
     def everythingAtOnce(self):
