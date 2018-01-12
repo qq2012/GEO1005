@@ -57,8 +57,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # set up GUI operation signals
 
-        # data
-
+        # # Old buttons
         # elf.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
         # self.minMaxBufferButton.clicked.connect(self.calculateDonut)
         # self.clearBuffersButton.clicked.connect(self.removeLegendLayer)
@@ -83,6 +82,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.selectLocationButton.clicked.connect(self.selectLocation)
         self.clearSelectionButton.clicked.connect(self.clearTopSelection)
         self.createReportButton.clicked.connect(self.createReport)
+        self.reportButton.clicked.connect(self.sendReport)
 
 
         # results tab
@@ -97,26 +97,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.legend2Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend2.png'))
 
     # Initial settings functions
-
-    def messageBoxExecute(self, msg):
-        msgBox = QtGui.QMessageBox()
-        msgBox.setText(msg)
-        msgBox.setStandardButtons(QtGui.QMessageBox.Yes)
-        msgBox.addButton(QtGui.QMessageBox.No)
-        msgBox.setDefaultButton(QtGui.QMessageBox.No)
-        if msgBox.exec_() == QtGui.QMessageBox.Yes:
-            return True
-
-    # def openFire(self,filename=""):
-    #     if self.messageBoxExecute("All current layers will be dropped, do you want to continue?"):
-    #         last_dir = os.path.join(self.plugin_dir, 'sample_data')
-    #         new_file = QtGui.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
-    #
-    #     if new_file:
-    #        self.iface.addProject(unicode(new_file))
-    #
-    #     self.fire_layer = self.setFireLayer()
-
     def selectFire(self):
         if self.messageBoxExecute("You are changing Fire Scene!\nAll current layers will be dropped, do you want to continue?"):
 
@@ -510,7 +490,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def updateTable(self, values):
         self.statisticsTable.setColumnCount(4)
-        self.statisticsTable.setHorizontalHeaderLabels(["ID","Landuse", "Size", "Distance"])
+        self.statisticsTable.setHorizontalHeaderLabels(["ID","Landuse", "Size", "Distance (m)"])
         self.statisticsTable.setRowCount(len(values))
         i = 0
         for item in values:
@@ -527,6 +507,16 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def clearTable(self):
         self.statisticsTable.clear()
+
+    def sendReport(self):
+        location = uf.getLegendLayerByName(self.iface, 'Top locations').selectedFeatures()
+        if len(location) > 1:
+            self.messageBoxOk('You can only select one location to report. Please try again.')
+        else:
+            loc_id = location[0].attribute('FID2')
+
+            if self.messageBoxExecute('You have selected location {}.\nDo you want to report this location to the fire department\nand relay the position to all units?'.format(int(loc_id))):
+                self.messageBoxOk('Location reported and relayed successfully to all units!')
 
     # User functions
     def zoomToTopLocations(self):
@@ -579,6 +569,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def giveMessage(self):
         self.iface.messageBar().pushMessage("test test:", "{}".format("testing"), level=0, duration=5)
+
+    def messageBoxOk(self, msg):
+        msgBox = QtGui.QMessageBox()
+        msgBox.setText(msg)
+        msgBox.setStandardButtons(QtGui.QMessageBox.Ok)
+        msgBox.exec_()
+
+    def messageBoxExecute(self, msg):
+        msgBox = QtGui.QMessageBox()
+        msgBox.setText(msg)
+        msgBox.setStandardButtons(QtGui.QMessageBox.Yes)
+        msgBox.addButton(QtGui.QMessageBox.No)
+        msgBox.setDefaultButton(QtGui.QMessageBox.No)
+        if msgBox.exec_() == QtGui.QMessageBox.Yes:
+            return True
 
     # clearing functions
     def removeLegendLayer(self, layer):
