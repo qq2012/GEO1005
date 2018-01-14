@@ -422,14 +422,23 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if result_area and ok_areas:
             self.selectFeaturesBuffer(ok_areas)
             runalg = processing.runalg('qgis:saveselectedfeatures', ok_areas,
-                                       '{}/analysis_data/Selection.shp'.format(self.plugin_dir))
-            selection_layer = self.runalgShortcut(runalg, 'Selection')
+                                       '{}/analysis_data/Temp_Selection.shp'.format(self.plugin_dir))
+            selection_layer = self.runalgShortcut(runalg, 'Temp_Selection')
             QgsMapLayerRegistry.instance().addMapLayers([selection_layer])
             QgsMapLayerRegistry.instance().addMapLayers([result_area])
             ok_areas.removeSelection()
 
+            cone = uf.getLegendLayerByName(self.iface, "Smoke cone")
+            uf.selectFeaturesByIntersection(selection_layer, cone, False)
+
+            runalgagain = processing.runalg('qgis:saveselectedfeatures', selection_layer,
+                                       '{}/analysis_data/Selection.shp'.format(self.plugin_dir))
+            selection_layer2 = self.runalgShortcut(runalgagain, 'Selection')
+            QgsMapLayerRegistry.instance().addMapLayers([selection_layer2])
+            QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
+
         QgsMapLayerRegistry.instance().removeMapLayer(result_area.id())
-        return selection_layer
+        return selection_layer2
 
     def filterSelectionLayer(self, selection_layer):
         routes_layer = uf.getLegendLayerByName(self.iface, 'Routes')
