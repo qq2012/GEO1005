@@ -656,6 +656,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 area_layer, sorted_features = self.filterSelectionLayer(selection_lyr)
                 top_layer = self.selectTopLocations(area_layer, sorted_features)
                 self.extractAttributeSummary(top_layer)
+                self.tabWidget.setCurrentIndex(1)
 
     def closeEvent(self, event):
         # self.clearAllAnalysisLayers()
