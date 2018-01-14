@@ -110,12 +110,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             elif fire == 'Fire 4':
                 scenario_nr = 4
 
-            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
-            self.clearLegend()
-            project = QgsProject.instance().read(QFileInfo(path))
-            self.setFireLayer()
-            self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
-            self.updateFireInfotextBrowser(fire)
+        path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
+        self.clearLegend()
+        project = QgsProject.instance().read(QFileInfo(path))
+        self.setFireLayer()
+        self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
+        self.updateFireInfotextBrowser(fire)
 
     def updateFireInfotextBrowser(self, fire):
 
