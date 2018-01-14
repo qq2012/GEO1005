@@ -95,27 +95,28 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # Legend images
         self.legend1Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend1.png'))
         self.legend2Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend2.png'))
+        self.iconLabel.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/icon3.png'))
+
 
     # Initial settings functions
     def selectFire(self):
-        if self.messageBoxExecute("You are changing Fire Scene!\nAll current layers will be dropped, do you want to continue?"):
+        try:
+            scenario_nr = self.selectFireButton.currentText()[5]
+            if self.messageBoxExecute(
+                    "You are changing Fire Scene!\nAll current layers will be dropped, do you want to continue?"):
 
-            fire = self.selectFireButton.currentText()
-            if fire == 'Fire 1':
-                scenario_nr = 1
-            elif fire == 'Fire 2':
-                scenario_nr = 2
-            elif fire == 'Fire 3':
-                scenario_nr = 3
-            elif fire == 'Fire 4':
-                scenario_nr = 4
+                path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
+                self.clearLegend()
+                project = QgsProject.instance().read(QFileInfo(path))
+                self.setFireLayer()
+                self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
+                self.updateFireInfotextBrowser('Fire {}'.format(scenario_nr))
+            else:
+                return
 
-            path = os.path.join(self.plugin_dir, 'sample_data', 'Fire{}_scenario.qgs'.format(str(scenario_nr)))
-            self.clearLegend()
-            project = QgsProject.instance().read(QFileInfo(path))
-            self.setFireLayer()
-            self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
-            self.updateFireInfotextBrowser(fire)
+        except IndexError:
+            return
+
 
     def updateFireInfotextBrowser(self, fire):
 
