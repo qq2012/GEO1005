@@ -589,6 +589,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             if layer:
                 self.removeLegendLayer(layer)
         self.clearAnalysisDataFolder()
+        self.locationsFound = False
 
     def clearAnalysisDataFolder(self):
         folder = '{}/analysis_data/'.format(self.plugin_dir)
