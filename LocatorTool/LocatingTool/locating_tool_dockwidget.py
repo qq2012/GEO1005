@@ -77,12 +77,13 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # self.testMessageButton.clicked.connect(self.giveMessage)
         self.zoomToLocations.clicked.connect(self.zoomToTopLocations)
         self.zoomToFocusAreaButton.clicked.connect(self.zoomToFocusArea)
-        self.everythingAtOnceButton.clicked.connect(self.everythingAtOnce)
+        self.everythingAtOnceButton.clicked.connect(self.findLocations)
         self.completeClearButton.clicked.connect(self.clearAllAnalysisLayers)
         self.selectLocationButton.clicked.connect(self.selectLocation)
         self.clearSelectionButton.clicked.connect(self.clearTopSelection)
         self.createReportButton.clicked.connect(self.createReport)
         self.reportButton.clicked.connect(self.sendReport)
+        self.tabWidget.setTabEnabled(1,False)
 
 
         # results tab
@@ -91,6 +92,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # Standing attributes - 'global variables'
         self.plugin_dir = os.path.dirname(__file__)
         self.fire_layer = self.setFireLayer()
+        self.locationsFound = False
 
         # Legend images
         self.legend1Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend1.png'))
@@ -111,12 +113,12 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 self.setFireLayer()
                 self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
                 self.updateFireInfotextBrowser('Fire {}'.format(scenario_nr))
+                self.locationsFound = False
             else:
                 return
 
         except IndexError:
             return
-
 
     def updateFireInfotextBrowser(self, fire):
 
@@ -541,6 +543,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         location = uf.getLegendLayerByName(self.iface, 'Top locations').selectedFeatures()
         if len(location) > 1:
             self.messageBoxOk('You can only select one location to report. Please try again.')
+        elif len(location) < 1:
+            self.messageBoxOk('You have not marked a location to report. Please mark the wanted location and try again.')
         else:
             loc_id = location[0].attribute('FID2')
 
@@ -644,29 +648,42 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 uf.showMessage(self.iface, 'OBS analysis_data folder not cleared completely!', lev=2, dur=5)
 
     def createReport(self):
+        uf.showMessage(self.iface, 'hello', dur=20)
         path = os.path.join(self.plugin_dir, 'sample_data')
         new_file = QtGui.QFileDialog.getSaveFileName(self, "", path, "(*.png)")
         self.iface.mapCanvas().saveAsImage("{}".format(new_file))
 
     # The BIG button function
-    def everythingAtOnce(self):
+
+    def findLocations(self):
         if self.selectFireButton.currentIndex() == 0:
             uf.showMessage(self.iface, 'OBS Please select a fire scenario', lev=2, dur=5)
         else:
-            if self.messageBoxExecute('Warning: All previous locations will be removed. \n\nDo you want to continue?'):
-                self.clearAllAnalysisLayers()
-                self.clearAnalysisDataFolder()
-                firelayer = self.fire_layer
-                donut_layer = self.calculateDonut(firelayer)
-                self.calculateCone(firelayer)
-                self.biteFromDonut(donut_layer)
-                selection_lyr = self.markAreas()
-                self.focusArea(firelayer)
-                self.calculateRoute()
-                area_layer, sorted_features = self.filterSelectionLayer(selection_lyr)
-                top_layer = self.selectTopLocations(area_layer, sorted_features)
-                self.extractAttributeSummary(top_layer)
-                self.tabWidget.setCurrentIndex(1)
+            if self.locationsFound:
+                if self.messageBoxExecute('Warning: All previous locations will be removed. \n\nDo you want to continue?'):
+                    self.everythingAtOnce()
+                else:
+                    return
+            else:
+                self.locationsFound = True
+                self.everythingAtOnce()
+
+    def everythingAtOnce(self):
+        self.clearAllAnalysisLayers()
+        self.clearAnalysisDataFolder()
+        firelayer = self.fire_layer
+        donut_layer = self.calculateDonut(firelayer)
+        self.calculateCone(firelayer)
+        self.biteFromDonut(donut_layer)
+        selection_lyr = self.markAreas()
+        self.focusArea(firelayer)
+        self.calculateRoute()
+        area_layer, sorted_features = self.filterSelectionLayer(selection_lyr)
+        top_layer = self.selectTopLocations(area_layer, sorted_features)
+        self.extractAttributeSummary(top_layer)
+        self.tabWidget.setTabEnabled(1, True)
+        self.tabWidget.setCurrentIndex(1)
+
 
     def closeEvent(self, event):
         # self.clearAllAnalysisLayers()
