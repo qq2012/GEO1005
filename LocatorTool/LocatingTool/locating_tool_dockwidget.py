@@ -30,6 +30,7 @@ from PyQt4.QtCore import pyqtSignal
 from PyQt4.QtCore import QFileInfo
 from qgis.core import *
 import processing
+import random
 
 from . import utility_functions as uf
 
@@ -100,12 +101,18 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 self.setFireLayer()
                 self.iface.mainWindow().setWindowTitle(os.path.splitext(os.path.basename(path))[0])
                 self.updateFireInfotextBrowser('Fire {}'.format(scenario_nr))
+                self.setParameters()
                 self.locationsFound = False
             else:
                 return
 
         except IndexError:
             return
+
+    def setParameters(self):
+        self.selectFireSeverityCombo.setCurrentIndex(random.randint(0,4))
+        self.updateDistances()
+        self.chooseWindDirectionCombo.setCurrentIndex(random.randint(0,8))
 
     def updateFireInfotextBrowser(self, fire):
 
