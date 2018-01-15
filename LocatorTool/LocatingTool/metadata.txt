@@ -7,7 +7,7 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Locating Tool
+name=MCC Locator
 qgisMinimumVersion=2.0
 description=Finds suitable areas for a mobile control center
 version=0.1

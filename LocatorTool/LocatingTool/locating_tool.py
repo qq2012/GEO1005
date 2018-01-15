@@ -52,7 +52,7 @@ class LocatingTool:
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'LocatingTool_{}.qm'.format(locale))
+            'MCCLocator_{}.qm'.format(locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -63,10 +63,10 @@ class LocatingTool:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Locating Tool')
+        self.menu = self.tr(u'&MCC Locator')
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'LocatingTool')
-        self.toolbar.setObjectName(u'LocatingTool')
+        self.toolbar = self.iface.addToolBar(u'MCCLocator')
+        self.toolbar.setObjectName(u'MCCLocator')
 
         #print "** INITIALIZING LocatingTool"
 
@@ -87,7 +87,7 @@ class LocatingTool:
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('LocatingTool', message)
+        return QCoreApplication.translate('MCCLocator', message)
 
 
     def add_action(
@@ -200,7 +200,7 @@ class LocatingTool:
 
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Locating Tool'),
+                self.tr(u'&MCC Locator'),
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar

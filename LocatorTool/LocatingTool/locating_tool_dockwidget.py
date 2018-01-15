@@ -57,24 +57,11 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # set up GUI operation signals
 
-        # # Old buttons
-        # elf.selectInBufferButton.clicked.connect(self.selectFeaturesBuffer)
-        # self.minMaxBufferButton.clicked.connect(self.calculateDonut)
-        # self.clearBuffersButton.clicked.connect(self.removeLegendLayer)
-        # self.markAreasButton.clicked.connect(self.markAreas)
-        # self.clearMarkedButton.clicked.connect(self.clearMarked)
-        # self.calculateConeButton.clicked.connect(self.calculateCone)
-        # self.takeBiteFromDonutButton.clicked.connect(self.biteFromDonut)
-        # self.shortestRouteButton.clicked.connect(self.calculateRoute)
-        # self.getSummaryButton.clicked.connect(self.setSelectedAttribute)
-
-        # self.openFireButton.clicked.connect(self.openFire)
         self.selectFireButton.activated.connect(self.selectFire) # This is not a button - it's a comboBox!
 
         self.chooseWindDirectionCombo.activated.connect(self.chooseWindDirection)
         self.selectFireSeverityCombo.activated.connect(self.updateDistances)
 
-        # self.testMessageButton.clicked.connect(self.giveMessage)
         self.zoomToLocations.clicked.connect(self.zoomToTopLocations)
         self.zoomToFocusAreaButton.clicked.connect(self.zoomToFocusArea)
         self.everythingAtOnceButton.clicked.connect(self.findLocations)
@@ -123,19 +110,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def updateFireInfotextBrowser(self, fire):
 
         if fire == 'Fire 1':
-            # self.FireInfotextBrowser.insertText(
                 self.descriptionLabel.setText(
                 'Affected area: Noordereiland, residence buildings\nDuration since: 23:50 24-12-2017\nEvacuation status: Initiated, residents still in buildings')
         elif fire == 'Fire 2':
-            # self.FireInfotextBrowser.setHtml(
             self.descriptionLabel.setText(
                 'Affected area: Delfshaven, office building\nDuration since: 19:00 14-01-2018\nEvacuation status: Office workers potentially left in the building')
         elif fire == 'Fire 3':
-            # self.FireInfotextBrowser.setHtml(
             self.descriptionLabel.setText(
                 'Affected area: Lijnbaan, residential and commercial area\nDuration since: 12:00 15-01-2018\nEvacuation status: Ongoing')
         elif fire == 'Fire 4':
-            # self.FireInfotextBrowser.setHtml(
             self.descriptionLabel.setText(
                 'Affected area: Katendrecht\nDuration since:17:00, 01-01-2018\nEvacuation status: Done')
         else:
@@ -148,7 +131,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.fire_layer = fire
 
         else:
-            uf.showMessage(self.iface, 'No fire scenario has been found', lev=2,dur=3)
+            uf.showMessage(self.iface, 'No fire scene is selected', lev=0,dur=3)
         self.setStylesLayers()
         return fire
 
@@ -258,39 +241,27 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         # select the active layer
         layer = uf.getLegendLayerByName(self.iface, "Buffer")
-
         # get feature of the layer
         feature = layer.getFeatures().next()
         geom = feature.geometry()
-
         pt = QgsPoint(coords[0], coords[1])
-
         geom.rotate(angle, pt)
-
         # Extract CRS from route
         CRS = layer.crs().postgisSrid()
-
         URI = "Polygon?crs=epsg:" + str(CRS) + "&field=id:integer""&index=yes"
         # Create polygon layer for buffer
         mem_layer = QgsVectorLayer(URI,"Smoke cone","memory")
-
         # add Map Layer to Registry
         QgsMapLayerRegistry.instance().addMapLayer(mem_layer)
-
         # Prepare mem_layer for editing
         mem_layer.startEditing()
-
         # Set feature for Smoke cone layer
         feat = QgsFeature()
-
         # Set geometry for Smoke cone layer
         feat.setGeometry(geom)
-
         # set attributes values for Smoke cone layer
         feat.setAttributes([1])
-
         mem_layer.addFeature(feat, True)
-
         # stop editing and save changes
         mem_layer.commitChanges()
 
@@ -310,7 +281,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def biteFromDonut(self, donut_layer):
         donut = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'test', 'ogr')
-        bite = uf.getLegendLayerByName(self.iface, "Smoke cone") #TODO change!
+        bite = uf.getLegendLayerByName(self.iface, "Smoke cone")
         if donut and bite:
             self.runalgShortcut(processing.runalg('qgis:difference', donut, bite, True, '{}/analysis_data/donut_bite.shp'.format(self.plugin_dir)))
             QgsMapLayerRegistry.instance().removeMapLayer(donut_layer.id())
@@ -335,7 +306,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def getNetwork(self):
         roads_layer = uf.getLegendLayerByName(self.iface, 'Roads')
         if roads_layer:
-            # see if there is an obstacles layer to subtract roads from the network TODO: Do we want obstacles??
+            # see if there is an obstacles layer to subtract roads from the network
             obstacles_layer = uf.getLegendLayerByName(self.iface, "Obstacles")
             if obstacles_layer:
                 # retrieve roads outside obstacles (inside = False)
@@ -388,18 +359,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 cost = QgsDistanceArea().measureLine(path) #Calculates the length of the path
                 uf.insertTempFeatures(routes_layer, [path], [[locations_list[destination-1],cost]])
 
-            # style_path = "%s/styles/" % QgsProject.instance().homePath()
-            # processing.runalg('qgis:setstyleforvectorlayer', routes_layer, "%sShortestRoute_style.qml" % style_path)
-
-    def deleteRoutes(self): #TODO: implement this function? - maybe not needed since it is implemented in the 'clear-all'button?
-        routes_layer = uf.getLegendLayerByName(self.iface, "Routes")
-        if routes_layer:
-            ids = uf.getAllFeatureIds(routes_layer)
-            routes_layer.startEditing()
-            for id in ids:
-                routes_layer.deleteFeature(id)
-            routes_layer.commitChanges()
-
     # Filtering and selection functions
 
     def selectFeaturesBuffer(self, layer=0):
@@ -407,8 +366,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         if not intersect_layer:
             intersect_layer = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut', 'ogr')
 
+        # If you wanna show the intersect_layer, uncomment the below line
         # QgsMapLayerRegistry.instance().addMapLayers([intersect_layer])
-
 
         if layer and intersect_layer:
             uf.selectFeaturesByIntersection(layer, intersect_layer, True)
@@ -421,8 +380,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             result_area = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut_bite', 'ogr')
 
         ok_areas = uf.getLegendLayerByName(self.iface, "Available_areas")
-        # Check possibility of this function
-        if result_area and ok_areas:
+        if result_area and ok_areas:  # Check possibility of this function
             self.selectFeaturesBuffer(ok_areas)
             runalg = processing.runalg('qgis:saveselectedfeatures', ok_areas,
                                        '{}/analysis_data/Temp_Selection.shp'.format(self.plugin_dir))
@@ -477,7 +435,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 return None, None, found
 
     def selectTopLocations(self, locations_layer, sorted_features):
-        top_nr = int(self.numOfResultsLineEdit.text())
+        top_nr = int(self.spinBox.value())
         top = sorted_features[0:top_nr]
         top_fid = []
         for feature in top:
@@ -500,7 +458,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         routes_layer = uf.getLegendLayerByName(self.iface, 'Routes')
         uf.selectFeaturesByListValues(routes_layer, 'to_FID', top_fid)
 
-        runalg = processing.runalg('qgis:saveselectedfeatures', routes_layer, None) #TODO: do we want to save this layer?
+        runalg = processing.runalg('qgis:saveselectedfeatures', routes_layer, None)
         top_layer = self.runalgShortcut(runalg, "Fire-routes", load=True)
 
         self.removeLegendLayer(routes_layer)
@@ -584,8 +542,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         uf.selectFeaturesByListValues(top_layer, 'FID2', fids)
         self.zoomToTopLocations()
 
-        # TODO: add self.zoomFocalArea()
-
     def clearTopSelection(self):
         top_layer = uf.getLegendLayerByName(self.iface, 'Top locations')
         top_layer.removeSelection()
@@ -653,7 +609,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
                 uf.showMessage(self.iface, 'OBS analysis_data folder not cleared completely!', lev=2, dur=5)
 
     def createReport(self):
-        uf.showMessage(self.iface, 'hello', dur=20)
         path = os.path.join(self.plugin_dir, 'sample_data')
         new_file = QtGui.QFileDialog.getSaveFileName(self, "", path, "(*.png)")
         self.iface.mapCanvas().saveAsImage("{}".format(new_file))
@@ -695,9 +650,9 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
     def closeEvent(self, event):
-        # self.clearAllAnalysisLayers()
-        #TODO clear analysis_data folder
         self.clearAnalysisDataFolder()
         self.closingPlugin.emit()
+        self.clearAllAnalysisLayers()
+        self.clearAnalysisDataFolder()
         event.accept()
 

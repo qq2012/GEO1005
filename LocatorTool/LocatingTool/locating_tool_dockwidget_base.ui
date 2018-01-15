@@ -124,25 +124,6 @@
               </property>
              </widget>
             </item>
-            <item row="14" column="2">
-             <widget class="QLineEdit" name="numOfResultsLineEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>95</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>5</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="2">
              <widget class="QComboBox" name="selectFireButton">
               <property name="sizePolicy">
@@ -489,6 +470,22 @@ Find locations
               </property>
               <property name="text">
                <string>Select fire scene</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="2">
+             <widget class="QSpinBox" name="spinBox">
+              <property name="maximumSize">
+               <size>
+                <width>95</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="value">
+               <number>5</number>
               </property>
              </widget>
             </item>
