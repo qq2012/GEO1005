@@ -198,7 +198,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         #create the donut (difference)
         runalg = processing.runalg('qgis:symmetricaldifference', MaxBuffer['OUTPUT'], MinBuffer['OUTPUT'], '{}/analysis_data/donut.shp'.format(self.plugin_dir))
         donut_layer = self.runalgShortcut(runalg, 'donut')
-        QgsMapLayerRegistry.instance().addMapLayer(donut_layer)
+
         return donut_layer
 
     def chooseWindDirection(self):
@@ -286,13 +286,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.removeLegendLayer(mean_coord_layer)
         self.removeLegendLayer(cone_width_layer)
 
-    def biteFromDonut(self, donut_layer):
-        donut = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'test', 'ogr')
-        bite = uf.getLegendLayerByName(self.iface, "Smoke cone")
-        if donut and bite:
-            self.runalgShortcut(processing.runalg('qgis:difference', donut, bite, True, '{}/analysis_data/donut_bite.shp'.format(self.plugin_dir)))
-            QgsMapLayerRegistry.instance().removeMapLayer(donut_layer.id())
-
     def focusArea(self, layer=0):
         #create the buffers needed min and max
         min_dist = self.getMaxBufferCutoff()
@@ -328,7 +321,10 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def buildNetwork(self):
         self.network_layer = self.getNetwork()
         if self.network_layer:
-            sources_layer = QgsVectorLayer('{}/analysis_data/Selection.shp'.format(self.plugin_dir), 'Selection', 'ogr')
+            if self.chooseWindDirectionCombo.currentIndex() == 8:
+                sources_layer = QgsVectorLayer('{}/analysis_data/Selection_nowind.shp'.format(self.plugin_dir), 'Selection', 'ogr')
+            else:
+                sources_layer = QgsVectorLayer('{}/analysis_data/Selection_wind.shp'.format(self.plugin_dir), 'Selection', 'ogr')
 
             source_points = [feature.geometry().centroid().asPoint() for feature in sources_layer.getFeatures()]
 
@@ -368,45 +364,35 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     # Filtering and selection functions
 
-    def selectFeaturesBuffer(self, layer=0):
-        intersect_layer = QgsVectorLayer('{}/analysis_data/donut_bite.shp'.format(self.plugin_dir), 'donut', 'ogr')
-        if not intersect_layer:
-            intersect_layer = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut', 'ogr')
-
-        # If you wanna show the intersect_layer, uncomment the below line
-        # QgsMapLayerRegistry.instance().addMapLayers([intersect_layer])
-
-        if layer and intersect_layer:
-            uf.selectFeaturesByIntersection(layer, intersect_layer, True)
-
     def markAreas(self):
-
-        result_area = QgsVectorLayer('{}/analysis_data/donut_bite.shp'.format(self.plugin_dir), 'donut', 'ogr')
-        if not result_area:
-            uf.showMessage(self.iface, 'no donut', dur=5)
-            result_area = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut_bite', 'ogr')
+        result_area = QgsVectorLayer('{}/analysis_data/donut.shp'.format(self.plugin_dir), 'donut', 'ogr')
 
         ok_areas = uf.getLegendLayerByName(self.iface, "Available_areas")
         if result_area and ok_areas:  # Check possibility of this function
-            self.selectFeaturesBuffer(ok_areas)
+            uf.selectFeaturesByIntersection(ok_areas, result_area, True)
             runalg = processing.runalg('qgis:saveselectedfeatures', ok_areas,
-                                       '{}/analysis_data/Temp_Selection.shp'.format(self.plugin_dir))
-            selection_layer = self.runalgShortcut(runalg, 'Temp_Selection')
+                                       '{}/analysis_data/Selection_nowind.shp'.format(self.plugin_dir))
+            selection_layer = self.runalgShortcut(runalg, 'Selection')
             QgsMapLayerRegistry.instance().addMapLayers([selection_layer])
             QgsMapLayerRegistry.instance().addMapLayers([result_area])
             ok_areas.removeSelection()
 
             cone = uf.getLegendLayerByName(self.iface, "Smoke cone")
-            uf.selectFeaturesByIntersection(selection_layer, cone, False)
+            selection_layer_wind = False
+            if cone:
+                uf.selectFeaturesByIntersection(selection_layer, cone, False)
 
-            runalgagain = processing.runalg('qgis:saveselectedfeatures', selection_layer,
-                                       '{}/analysis_data/Selection.shp'.format(self.plugin_dir))
-            selection_layer2 = self.runalgShortcut(runalgagain, 'Selection')
-            QgsMapLayerRegistry.instance().addMapLayers([selection_layer2])
-            QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
+                runalgagain = processing.runalg('qgis:saveselectedfeatures', selection_layer,
+                                                '{}/analysis_data/Selection_wind.shp'.format(self.plugin_dir))
+                selection_layer_wind = self.runalgShortcut(runalgagain, 'Selection')
+                QgsMapLayerRegistry.instance().addMapLayers([selection_layer_wind])
+                QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
 
         QgsMapLayerRegistry.instance().removeMapLayer(result_area.id())
-        return selection_layer2
+        if selection_layer_wind:
+            return selection_layer_wind
+        else:
+            return selection_layer
 
     def filterSelectionLayer(self, selection_layer):
         routes_layer = uf.getLegendLayerByName(self.iface, 'Routes')
@@ -496,7 +482,6 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         i = 0
         for item in values:
             # i is the table row, items must tbe added as QTableWidgetItems
-            # self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(i)))
             self.statisticsTable.setItem(i,0,QtGui.QTableWidgetItem(unicode(int(item[0])))) #fid
             self.statisticsTable.setItem(i,1,QtGui.QTableWidgetItem(unicode(item[1]))) #eng_desc
             self.statisticsTable.setItem(i,2,QtGui.QTableWidgetItem(unicode(item[2]))) #area
@@ -598,7 +583,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def clearAllAnalysisLayers(self):
         layers = ["Focus area", "Routes","join_layer", "Regular points", "Mean coordinates",
-                  "selected_area", "Smoke cone", "Top locations", "Fire-routes", "Selection"]
+                  "selected_area", "Smoke cone", "Top locations", "Fire-routes", "Selection", "donut", "donut bite"]
         for layer_name in layers:
             layer = uf.getLegendLayerByName(self.iface, layer_name)
             if layer:
@@ -639,9 +624,8 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.clearAllAnalysisLayers()
         self.clearAnalysisDataFolder()
         firelayer = self.fire_layer
-        donut_layer = self.calculateDonut(firelayer)
+        self.calculateDonut(firelayer)
         self.calculateCone(firelayer)
-        self.biteFromDonut(donut_layer)
         selection_lyr = self.markAreas()
         self.focusArea(firelayer)
         self.calculateRoute()
