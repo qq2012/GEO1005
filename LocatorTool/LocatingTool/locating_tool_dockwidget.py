@@ -460,16 +460,21 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             required_area = int(self.areaEdit.text())
             uf.selectFeaturesByRangeValues(join_layer, 'Area', required_area, max_area)
 
-            area_dict = processing.runalg('qgis:saveselectedfeatures', join_layer, None)
+            selected_features = join_layer.selectedFeatures()
+            if len(selected_features) > 0:
+                area_dict = processing.runalg('qgis:saveselectedfeatures', join_layer, None)
 
-            area_layer = QgsVectorLayer(area_dict[area_dict.keys()[0]], 'selected_area', 'ogr')
-            QgsMapLayerRegistry.instance().addMapLayers([area_layer])
-            QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
-            QgsMapLayerRegistry.instance().removeMapLayer(join_layer.id())
-            sorted_features = uf.sortByField(area_layer, 'length')
-
-
-            return area_layer, sorted_features
+                area_layer = QgsVectorLayer(area_dict[area_dict.keys()[0]], 'selected_area', 'ogr')
+                QgsMapLayerRegistry.instance().addMapLayers([area_layer])
+                QgsMapLayerRegistry.instance().removeMapLayer(selection_layer.id())
+                QgsMapLayerRegistry.instance().removeMapLayer(join_layer.id())
+                sorted_features = uf.sortByField(area_layer, 'length')
+                found = True
+                return area_layer, sorted_features, found
+            else:
+                self.messageBoxOk('No available locations within the specified distance reach the area-requirement. Please try again with different parameters.')
+                found = False
+                return None, None, found
 
     def selectTopLocations(self, locations_layer, sorted_features):
         top_nr = int(self.numOfResultsLineEdit.text())
@@ -630,7 +635,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def clearAllAnalysisLayers(self):
         layers = ["Focus area", "Routes","join_layer", "Regular points", "Mean coordinates",
-                  "selected_area", "Smoke cone", "Top locations", "Fire-routes"]
+                  "selected_area", "Smoke cone", "Top locations", "Fire-routes", "Selection"]
         for layer_name in layers:
             layer = uf.getLegendLayerByName(self.iface, layer_name)
             if layer:
@@ -678,11 +683,15 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         selection_lyr = self.markAreas()
         self.focusArea(firelayer)
         self.calculateRoute()
-        area_layer, sorted_features = self.filterSelectionLayer(selection_lyr)
-        top_layer = self.selectTopLocations(area_layer, sorted_features)
-        self.extractAttributeSummary(top_layer)
-        self.tabWidget.setTabEnabled(1, True)
-        self.tabWidget.setCurrentIndex(1)
+        area_layer, sorted_features, found = self.filterSelectionLayer(selection_lyr)
+        if found:
+            top_layer = self.selectTopLocations(area_layer, sorted_features)
+            self.extractAttributeSummary(top_layer)
+            self.tabWidget.setTabEnabled(1, True)
+            self.tabWidget.setCurrentIndex(1)
+        else:
+            self.locationsFound = False
+            self.clearAllAnalysisLayers()
 
 
     def closeEvent(self, event):

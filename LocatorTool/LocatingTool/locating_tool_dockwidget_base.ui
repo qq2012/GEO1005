@@ -134,7 +134,7 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>60</width>
+                <width>95</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -279,7 +279,7 @@ Find locations
                </size>
               </property>
               <property name="text">
-               <string>Distance (min, max)</string>
+               <string>Distance (min, max) [m]</string>
               </property>
              </widget>
             </item>
@@ -338,7 +338,7 @@ Find locations
               </property>
               <property name="maximumSize">
                <size>
-                <width>60</width>
+                <width>95</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -442,7 +442,7 @@ Find locations
                </size>
               </property>
               <property name="text">
-               <string>Required area</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Required area [m&lt;span style=&quot; vertical-align:super;&quot;&gt;2&lt;/span&gt;]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -470,7 +470,7 @@ Find locations
               </property>
               <property name="maximumSize">
                <size>
-                <width>60</width>
+                <width>95</width>
                 <height>16777215</height>
                </size>
               </property>
