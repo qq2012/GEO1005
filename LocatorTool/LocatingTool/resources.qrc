@@ -3,7 +3,8 @@
         <file>icon.png</file>
         <file>icon/Legend1.png</file>
         <file>icon/Legend2.png</file>
-        <file>icon/icon2.png</file>
+        <file>icon/icon.png</file>
+        <file>icon/icon_name.png</file>
         <file>icon/name.png</file>
     </qresource>
 </RCC>

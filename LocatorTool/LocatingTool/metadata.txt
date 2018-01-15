@@ -11,7 +11,7 @@ name=MCC Locator
 qgisMinimumVersion=2.0
 description=Finds suitable areas for a mobile control center
 version=0.1
-author=Group 2
+author=Anna Nordlov
 email=group2@group2company.enterprise
 
 about=This plugin has been developed to help in the decision of locating a mobile command center (MCC) after a major incident has taken place. A MCC is used to get a central location for decision making and logistics on site close to the incident. This location serves as a rendezvous point and offer service facilities for the emergency workers as well as an extended arm for the decision makers which often are located far from the incident.

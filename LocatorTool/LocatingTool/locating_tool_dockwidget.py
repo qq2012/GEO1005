@@ -84,7 +84,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
         # Legend images
         self.legend1Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend1.png'))
         self.legend2Label.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/Legend2.png'))
-        self.iconLabel.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/icon3.png'))
+        self.iconLabel.setPixmap(QtGui.QPixmap(self.plugin_dir + '/icon/icon_name.png'))
 
 
     # Initial settings functions
@@ -131,7 +131,7 @@ class LocatingToolDockWidget(QtGui.QDockWidget, FORM_CLASS):
             self.fire_layer = fire
 
         else:
-            uf.showMessage(self.iface, 'No fire scene is selected', lev=0,dur=3)
+            uf.showMessage(self.iface, 'No fire scene is selected', lev=0,dur=5)
         self.setStylesLayers()
         return fire
 
